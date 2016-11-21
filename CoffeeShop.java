@@ -25,7 +25,8 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		app.setExtendedState(JFrame.MAXIMIZED_BOTH);//makes the app full screen!
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		app.setTitle("Coffee Shop");
-		app.setVisible(true);//dont do that!
+		app.setVisible(true);
+		//Sneha
 	}
 
 	@Override
