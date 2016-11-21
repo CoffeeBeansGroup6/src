@@ -21,8 +21,8 @@ public class CoffeeShop extends JFrame implements ActionListener{
 
 	public static void main(String[] args) {
 		CoffeeShop app = new CoffeeShop();
-
-		app.setSize(500,500);
+		
+		app.setExtendedState(JFrame.MAXIMIZED_BOTH);//makes the app full screen!
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		app.setTitle("Coffee Shop");
 		app.setVisible(true);
