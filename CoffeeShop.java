@@ -20,5 +20,6 @@ public class CoffeeShop {
 		app.setVisible(true);
 
 	}
-
+	
+	//This a test haha
 }
