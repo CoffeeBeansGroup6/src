@@ -12,7 +12,12 @@ public class CoffeeShop {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		CoffeeShop app = new CoffeeShop();
+
+		app.setSize(400, 400);
+		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		app.setTitle("Coffee Shop");
+		app.setVisible(true);
 
 	}
 
