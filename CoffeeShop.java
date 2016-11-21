@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -14,6 +15,7 @@ import javax.swing.JPanel;
 public class CoffeeShop extends JFrame implements ActionListener{
 
 	JPanel mainScreen = new JPanel();
+	JButton checkout = new JButton("Check out");
 	
 	public CoffeeShop() {
 		
