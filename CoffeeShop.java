@@ -1,4 +1,8 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /*
  * Team 6: Coffee Beans
@@ -7,8 +11,10 @@ import javax.swing.JFrame;
  * CoffeeShop
  */
 
-public class CoffeeShop extends JFrame{
+public class CoffeeShop extends JFrame implements ActionListener{
 
+	JPanel mainScreen = new JPanel();
+	
 	public CoffeeShop() {
 		// TODO Auto-generated constructor stub
 	}
@@ -16,11 +22,17 @@ public class CoffeeShop extends JFrame{
 	public static void main(String[] args) {
 		CoffeeShop app = new CoffeeShop();
 
-		app.setSize(400, 400);
+		app.setSize(500,500);
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		app.setTitle("Coffee Shop");
 		app.setVisible(true);
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	//This a test haha
