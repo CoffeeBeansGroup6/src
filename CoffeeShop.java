@@ -1,9 +1,12 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /*
  * Team 6: Coffee Beans
@@ -15,9 +18,16 @@ import javax.swing.JPanel;
 public class CoffeeShop extends JFrame implements ActionListener{
 
 	JPanel mainScreen = new JPanel();
+	DefaultListModel data = new DefaultListModel();
+	JList orderList = new JList(data);
+	JScrollPane jsp = new JScrollPane(orderList);
 	JButton checkout = new JButton("Check out");
 	
 	public CoffeeShop() {
+		checkout.addActionListener(this);
+		mainScreen.add(jsp);
+		mainScreen.add(checkout);
+		add(mainScreen);
 		
 	}
 
