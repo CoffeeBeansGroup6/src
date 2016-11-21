@@ -1,3 +1,5 @@
+import javax.swing.JFrame;
+
 /*
  * Team 6: Coffee Beans
  * Sneha Akarapu, Kyle Watkins, Preston Jackson, Sarah Taff, Alejandro Delgadillo, Ben Deleus
@@ -5,7 +7,7 @@
  * CoffeeShop
  */
 
-public class CoffeeShop {
+public class CoffeeShop extends JFrame{
 
 	public CoffeeShop() {
 		// TODO Auto-generated constructor stub
