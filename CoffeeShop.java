@@ -16,7 +16,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JPanel mainScreen = new JPanel();
 	
 	public CoffeeShop() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public static void main(String[] args) {
@@ -35,5 +35,4 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		
 	}
 	
-	//This a test haha
 }
