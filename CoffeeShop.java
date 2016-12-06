@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -83,9 +85,13 @@ public class CoffeeShop extends JFrame implements ActionListener{
 				return false; // makes table cells not-editable
 			}
 		};
-
+		
 		checkoutTable = new JTable(model);
 		sp = new JScrollPane(checkoutTable);
+		
+		Color color = UIManager.getColor("Table.gridColor");
+		MatteBorder border = new MatteBorder(1, 1, 0, 0, color);
+		checkoutTable.setBorder(border);
 		
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
