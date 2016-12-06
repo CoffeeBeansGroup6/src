@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,15 +42,15 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JButton removeItem = new JButton("Remove Selected Item");
 	
 	//Coffee Button Images
-	ImageIcon darkIcon = new ImageIcon(new ImageIcon("dark.jpg").getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
-	ImageIcon mediumIcon = new ImageIcon("dark.jpg");
-	ImageIcon blondeIcon = new ImageIcon("dark.jpg");
-	ImageIcon mochaIcon = new ImageIcon("dark.jpg");
-	ImageIcon vanillaIcon = new ImageIcon("dark.jpg");
-	ImageIcon decafIcon = new ImageIcon("dark.jpg");
-	ImageIcon espressoIcon = new ImageIcon("dark.jpg");
-	ImageIcon cocoIcon = new ImageIcon("dark.jpg");
-	ImageIcon teaIcon = new ImageIcon("dark.jpg");
+	ImageIcon darkIcon = new ImageIcon(new ImageIcon("dark.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon mediumIcon = new ImageIcon(new ImageIcon("medium.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon blondeIcon = new ImageIcon(new ImageIcon("blonde.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon mochaIcon = new ImageIcon(new ImageIcon("Mocha.jpeg").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon vanillaIcon = new ImageIcon(new ImageIcon("Vanilla.png").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon decafIcon = new ImageIcon(new ImageIcon("decaf.png").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon espressoIcon = new ImageIcon(new ImageIcon("espresso.png").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon cocoIcon = new ImageIcon(new ImageIcon("hotCoco.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
+	ImageIcon teaIcon = new ImageIcon(new ImageIcon("Tea.png").getImage().getScaledInstance(225, 225, Image.SCALE_DEFAULT));
 	
 	
 	//Coffee Buttons
@@ -62,6 +64,8 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JButton espressoButton = new JButton(espressoIcon);
 	JButton cocoButton = new JButton(cocoIcon);
 	JButton teaButton = new JButton(teaIcon);
+	
+	JLabel darkLabel = new JLabel("Dark Roast");
 	//-----------------------------------
 	
 	JLabel orderTotalLbl = new JLabel("$0.00");
@@ -69,6 +73,12 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	DefaultTableModel model;
 	JTable checkoutTable;
 	JScrollPane sp;
+	
+	
+	JPanel row1 = new JPanel();
+	JPanel row2 = new JPanel();
+	JPanel row3 = new JPanel();
+	
 	
 	public CoffeeShop() {
 		
@@ -107,6 +117,10 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		eastPanel.setBackground(new Color(191, 128, 64));
 		buttonPanel.setBackground(new Color(191, 128, 64));
 		mainPanel.setBackground(new Color(191, 128, 64));
+		row1.setBackground(new Color(191, 128, 64));
+		row2.setBackground(new Color(191, 128, 64));
+		row3.setBackground(new Color(191, 128, 64));
+		
 		buttonPanel.setPreferredSize(new Dimension(320,50));
 		eastPanel.setPreferredSize(new Dimension(350,this.getHeight()));
 		
@@ -127,18 +141,40 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		eastPanel.add(orderTotalLbl);
 		eastPanel.add(checkoutButton);
 		
-		darkButton.setPreferredSize(new Dimension(300,300));
-		mainPanel.add(darkButton);
-		/*
-		mainPanel.add(mediumButton);
-		mainPanel.add(blondeButton);
-		mainPanel.add(mochaButton);
-		mainPanel.add(vanillaButton);
-		mainPanel.add(decafButton);
-		mainPanel.add(espressoButton);
-		mainPanel.add(cocoButton);
-		mainPanel.add(teaButton);
-		*/
+		darkButton.setPreferredSize(new Dimension(225,225));
+		mediumButton.setPreferredSize(new Dimension(225,225));
+		blondeButton.setPreferredSize(new Dimension(225,225));
+		mochaButton.setPreferredSize(new Dimension(225,225));
+		vanillaButton.setPreferredSize(new Dimension(225,225));
+		decafButton.setPreferredSize(new Dimension(225,225));
+		espressoButton.setPreferredSize(new Dimension(225,225));
+		cocoButton.setPreferredSize(new Dimension(225,225));
+		teaButton.setPreferredSize(new Dimension(225,225));
+		
+		row1.add(darkButton);
+		row1.add(Box.createHorizontalStrut(20));
+		row1.add(mediumButton);
+		row1.add(Box.createHorizontalStrut(20));
+		row1.add(blondeButton);
+		
+		row2.add(mochaButton);
+		row2.add(Box.createHorizontalStrut(20));
+		row2.add(vanillaButton);
+		row2.add(Box.createHorizontalStrut(20));
+		row2.add(decafButton);
+		
+		row3.add(espressoButton);
+		row3.add(Box.createHorizontalStrut(20));
+		row3.add(cocoButton);
+		row3.add(Box.createHorizontalStrut(20));
+		row3.add(teaButton);
+
+		
+		mainPanel.setLayout(new GridLayout(3,1));	
+		mainPanel.add(row1);
+		mainPanel.add(row2);
+		mainPanel.add(row3);
+		
 		add(mainPanel, BorderLayout.CENTER);
 		add(eastPanel, BorderLayout.EAST);
 	}
