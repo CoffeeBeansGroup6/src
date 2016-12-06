@@ -32,7 +32,6 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JButton editItem = new JButton("Edit Selected Item");
 	JButton removeItem = new JButton("Remove Selected Item");
 	
-	
 	JLabel orderTotalLbl = new JLabel("$0.00");
 	
 	DefaultTableModel model;
@@ -111,7 +110,19 @@ public class CoffeeShop extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
+		if(e.getSource() == editItem){
+			
+		}
+		
+		if(e.getSource() == removeItem){
+			
+		}
+		
+		//All Check Out screens carried out here
+		if(e.getSource() == checkoutButton){
+			
+		}
 		
 	}
 	
