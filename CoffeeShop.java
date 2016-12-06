@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -36,6 +35,9 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JPanel eastPanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
 	JPanel mainPanel = new JPanel();
+	JPanel row1 = new JPanel();
+	JPanel row2 = new JPanel();
+	JPanel row3 = new JPanel();
 
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
@@ -64,8 +66,6 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JButton espressoButton = new JButton(espressoIcon);
 	JButton cocoButton = new JButton(cocoIcon);
 	JButton teaButton = new JButton(teaIcon);
-	
-	JLabel darkLabel = new JLabel("Dark Roast");
 	//-----------------------------------
 	
 	JLabel orderTotalLbl = new JLabel("$0.00");
@@ -73,12 +73,6 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	DefaultTableModel model;
 	JTable checkoutTable;
 	JScrollPane sp;
-	
-	
-	JPanel row1 = new JPanel();
-	JPanel row2 = new JPanel();
-	JPanel row3 = new JPanel();
-	
 	
 	public CoffeeShop() {
 		
@@ -128,18 +122,15 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		removeItem.addActionListener(this);
 		checkoutButton.addActionListener(this);
 		
-		checkoutButton.setPreferredSize(new Dimension(320, 60));
-		
-		sp.setPreferredSize(new Dimension(320,550));
-
-		buttonPanel.setLayout(new GridLayout(1,2));
-		buttonPanel.add(editItem);
-		buttonPanel.add(removeItem);
-		
-		eastPanel.add(sp);
-		eastPanel.add(buttonPanel);
-		eastPanel.add(orderTotalLbl);
-		eastPanel.add(checkoutButton);
+		darkButton.addActionListener(this);
+		mediumButton.addActionListener(this);
+		blondeButton.addActionListener(this);
+		mochaButton.addActionListener(this);
+		vanillaButton.addActionListener(this);
+		decafButton.addActionListener(this);
+		espressoButton.addActionListener(this);
+		cocoButton.addActionListener(this);
+		teaButton.addActionListener(this);
 		
 		darkButton.setPreferredSize(new Dimension(225,225));
 		mediumButton.setPreferredSize(new Dimension(225,225));
@@ -150,6 +141,17 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		espressoButton.setPreferredSize(new Dimension(225,225));
 		cocoButton.setPreferredSize(new Dimension(225,225));
 		teaButton.setPreferredSize(new Dimension(225,225));
+		checkoutButton.setPreferredSize(new Dimension(320, 60));
+		sp.setPreferredSize(new Dimension(320,550));
+
+		buttonPanel.setLayout(new GridLayout(1,2));
+		buttonPanel.add(editItem);
+		buttonPanel.add(removeItem);
+		
+		eastPanel.add(sp);
+		eastPanel.add(buttonPanel);
+		eastPanel.add(orderTotalLbl);
+		eastPanel.add(checkoutButton);
 		
 		row1.add(darkButton);
 		row1.add(Box.createHorizontalStrut(20));
@@ -168,7 +170,6 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		row3.add(cocoButton);
 		row3.add(Box.createHorizontalStrut(20));
 		row3.add(teaButton);
-
 		
 		mainPanel.setLayout(new GridLayout(3,1));	
 		mainPanel.add(row1);
@@ -191,6 +192,37 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		//All Item Choice Buttons
+		if(e.getSource() == darkButton){
+			
+		}
+		if(e.getSource() == mediumButton){
+			
+		}
+		if(e.getSource() == blondeButton){
+			
+		}
+		if(e.getSource() == mochaButton){
+			
+		}
+		if(e.getSource() == vanillaButton){
+			
+		}
+		if(e.getSource() == decafButton){
+			
+		}
+		if(e.getSource() == espressoButton){
+			
+		}
+		if(e.getSource() == cocoButton){
+			
+		}
+		if(e.getSource() == teaButton){
+			
+		}
+		
+		
+		//-----East Panel Buttons-----------
 		if(e.getSource() == editItem){
 			
 		}
