@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +26,9 @@ import javax.swing.table.DefaultTableModel;
 
 public class CoffeeShop extends JFrame implements ActionListener{
 
+	// holds all orderItems in your cart
+	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
+	
 	JPanel eastPanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
 	JPanel mainPanel = new JPanel();
@@ -122,6 +127,29 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
 			
+		}
+		
+	}
+	
+	
+	//Order Item Class
+	class OrderItem{
+		
+		String itemName;
+		BigDecimal price;
+		
+		public OrderItem(){
+			
+		}
+		
+		//returns the string format - item description and price
+		public String[] getRow() {
+			NumberFormat money = NumberFormat.getCurrencyInstance();
+			String price$ = money.format(price.doubleValue());
+			
+			String row[] = { itemName, price$};
+			
+			return row;
 		}
 		
 	}
