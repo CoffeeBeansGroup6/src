@@ -89,9 +89,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		checkoutTable = new JTable(model);
 		sp = new JScrollPane(checkoutTable);
 		
-		Color color = UIManager.getColor("Table.gridColor");
-		MatteBorder border = new MatteBorder(1, 1, 0, 0, color);
-		checkoutTable.setBorder(border);
+		checkoutTable.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
 		
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
@@ -189,8 +187,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		CoffeeShop app = new CoffeeShop();
 		
-		app.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		//app.setSize(1120, 790); if we dont want full screen
+		app.setExtendedState(JFrame.MAXIMIZED_BOTH);//makes the app full screen!
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		app.setTitle("Coffee Beans' Coffee Shop");
 		app.setVisible(true);
