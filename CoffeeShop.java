@@ -3,12 +3,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,6 +38,31 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
 	JButton removeItem = new JButton("Remove Selected Item");
+	
+	//Coffee Button Images
+	ImageIcon darkIcon = new ImageIcon(new ImageIcon("dark.jpg").getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+	ImageIcon mediumIcon = new ImageIcon("dark.jpg");
+	ImageIcon blondeIcon = new ImageIcon("dark.jpg");
+	ImageIcon mochaIcon = new ImageIcon("dark.jpg");
+	ImageIcon vanillaIcon = new ImageIcon("dark.jpg");
+	ImageIcon decafIcon = new ImageIcon("dark.jpg");
+	ImageIcon espressoIcon = new ImageIcon("dark.jpg");
+	ImageIcon cocoIcon = new ImageIcon("dark.jpg");
+	ImageIcon teaIcon = new ImageIcon("dark.jpg");
+	
+	
+	//Coffee Buttons
+	//-----------------------------------
+	JButton darkButton = new JButton(darkIcon);
+	JButton mediumButton = new JButton(mediumIcon);
+	JButton blondeButton = new JButton(blondeIcon);
+	JButton mochaButton = new JButton(mochaIcon);
+	JButton vanillaButton = new JButton(vanillaIcon);
+	JButton decafButton = new JButton(decafIcon);
+	JButton espressoButton = new JButton(espressoIcon);
+	JButton cocoButton = new JButton(cocoIcon);
+	JButton teaButton = new JButton(teaIcon);
+	//-----------------------------------
 	
 	JLabel orderTotalLbl = new JLabel("$0.00");
 	
@@ -99,7 +126,19 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		eastPanel.add(buttonPanel);
 		eastPanel.add(orderTotalLbl);
 		eastPanel.add(checkoutButton);
-
+		
+		darkButton.setPreferredSize(new Dimension(300,300));
+		mainPanel.add(darkButton);
+		/*
+		mainPanel.add(mediumButton);
+		mainPanel.add(blondeButton);
+		mainPanel.add(mochaButton);
+		mainPanel.add(vanillaButton);
+		mainPanel.add(decafButton);
+		mainPanel.add(espressoButton);
+		mainPanel.add(cocoButton);
+		mainPanel.add(teaButton);
+		*/
 		add(mainPanel, BorderLayout.CENTER);
 		add(eastPanel, BorderLayout.EAST);
 	}
