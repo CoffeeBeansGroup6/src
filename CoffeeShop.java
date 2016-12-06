@@ -89,8 +89,6 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		checkoutTable = new JTable(model);
 		sp = new JScrollPane(checkoutTable);
 		
-		checkoutTable.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
-		
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
 
