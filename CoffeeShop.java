@@ -101,7 +101,8 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
-
+		
+		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 20));
 		checkoutTable.setGridColor(Color.BLACK);// colors grid lines
 		
 		checkoutTable.getTableHeader().setFont(new Font("Arial",Font.PLAIN, 25));
