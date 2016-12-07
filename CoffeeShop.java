@@ -42,7 +42,9 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JPanel row3 = new JPanel();
 	
 	JPanel orderPanel = new JPanel();
+	JPanel checkoutPanel = new JPanel();
 	JFrame itemView = new JFrame();
+	JFrame checkoutView = new JFrame();
 
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
@@ -89,6 +91,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	
 	JButton addItem = new JButton("Add");
 	JButton cancelItem = new JButton("Cancel");
+	JButton cancelCheckout = new JButton("Cancel");
 	
 	int cartItems = 0;
 	BigDecimal orderTotal = new BigDecimal("0.00");
@@ -271,7 +274,12 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
+			checkoutView.setSize(400, 400);
+			checkoutView.setTitle("Checkout");
+			checkoutView.setVisible(true);
 			
+			checkoutPanel.add(cancelCheckout);
+			checkoutView.add(checkoutPanel);
 		}
 		
 	}
