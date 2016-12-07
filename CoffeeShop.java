@@ -783,7 +783,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		}
 		
 		if(e.getSource() == removeItem){
-			
+			if (checkoutTable.getSelectedRow() > -1) {
+				price -= cart.get(checkoutTable.getSelectedRow()).price.doubleValue();
+				orderTotalLbl.setText("$" + Math.round(100.00 * price) / 100.00);
+
+				cart.remove(checkoutTable.getSelectedRow());
+				model.removeRow(checkoutTable.getSelectedRow());
+			}
 		}
 		
 		//All Check Out screens carried out here
