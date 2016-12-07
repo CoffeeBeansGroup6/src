@@ -156,7 +156,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		cocoButton.setPreferredSize(new Dimension(225,225));
 		teaButton.setPreferredSize(new Dimension(225,225));
 		checkoutButton.setPreferredSize(new Dimension(320, 60));
-		sp.setPreferredSize(new Dimension(320,550));
+		sp.setPreferredSize(new Dimension(320,530));
 
 		buttonPanel.setLayout(new GridLayout(1,2));
 		buttonPanel.add(editItem);
@@ -196,8 +196,8 @@ public class CoffeeShop extends JFrame implements ActionListener{
 
 	public static void main(String[] args) {
 		CoffeeShop app = new CoffeeShop();
-		
-		app.setExtendedState(JFrame.MAXIMIZED_BOTH);//makes the app full screen!
+
+		app.setSize(1120,750);
 		app.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		app.setTitle("Coffee Beans' Coffee Shop");
 		app.setVisible(true);
