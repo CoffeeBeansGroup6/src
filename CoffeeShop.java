@@ -113,6 +113,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	
 	//Order Item Class
 	class OrderItem{
+		String CoffeeType;
 		String itemName;
 		BigDecimal price;
 		
@@ -285,10 +286,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		if(e.getSource() == editItem){
 			if(checkoutTable.getSelectedRow() > -1) {
 				OrderItem item = cart.get(checkoutTable.getSelectedRow());
-				itemView.setSize(450, 200);
-				itemView.setTitle(item.itemName);
-				itemView.setVisible(true);
-				itemView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				if(item.CoffeeType == "plain"){
+					plainCoffeeFrame(item.itemName, item.price.doubleValue());
+				}
+				else if(item.CoffeeType == "special"){
+					specialCoffeeFrame(item.itemName, item.price.doubleValue());
+				}
+				else{
+					nonCoffeeFrame(item.itemName, item.price.doubleValue());
+				}
 			}
 		}
 		
@@ -377,8 +383,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	public void plainCoffeeFrame(String itemName, double price){
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
+		item.CoffeeType = "plain";
 		item.itemName = itemName;
-		itemView.setSize(200, 200);
+		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
 		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -422,8 +429,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	public void specialCoffeeFrame(String itemName, double price){
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
+		item.CoffeeType = "special";
 		item.itemName = itemName;
-		itemView.setSize(450, 200);
+		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
 		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -470,7 +478,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
 		item.itemName = itemName;
-		itemView.setSize(450, 200);
+		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
 		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
