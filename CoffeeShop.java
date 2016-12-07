@@ -255,6 +255,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			largeRB = new JRadioButton("Large", false);
 			largeRB.addItemListener(this);
 			
+			frozenRB = new JRadioButton("Frozen", false);
+			frozenRB.addItemListener(this);
+			icedRB = new JRadioButton("Iced", false);
+			icedRB.addItemListener(this);
+			hotRB = new JRadioButton("Hot", true);
+			largeRB.addItemListener(this);
 			
 			
 		}
