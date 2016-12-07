@@ -131,9 +131,18 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		public OrderItem(String name){
 			itemName = name;
 		}
+		
+		
 			
 		//returns the string format - item description and price
 		public String[] getRow() {
+			
+			if(size == "Medium"){
+				price = price.add(one);
+			}else if(size == "Large"){
+				price = price.add(three);
+			}
+			
 			NumberFormat money = NumberFormat.getCurrencyInstance();
 			String price$ = money.format(price.doubleValue());
 			String row[] = {size + " " + temp +itemName, price$};
@@ -553,6 +562,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			tempPanel.add(frozenRB);
 			tempPanel.add(icedRB);
 			tempPanel.add(hotRB);
+			
 		}else{
 			item.temp = "";
 		}
@@ -568,10 +578,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			cart.get(cartItems).size = "Small";
 		} else if(e.getSource() == mediumRB){
 			cart.get(cartItems).size = "Medium";
-			//cart.get(cartItems).price = cart.get(cartItems).price.add(one);
 		} else if(e.getSource() == largeRB){
 			cart.get(cartItems).size = "Large";
-			//cart.get(cartItems).price = cart.get(cartItems).price.add(three);
 		}
 		
 		if(e.getSource() == frozenRB){
