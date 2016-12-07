@@ -254,7 +254,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			mediumRB.addItemListener(this);
 			largeRB = new JRadioButton("Large", false);
 			largeRB.addItemListener(this);
-		
+			
+			
 			
 		}
 		if(e.getSource() == mediumButton){
