@@ -780,12 +780,32 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			checkoutView.setVisible(true);
 			
 			checkoutPanel.add(cancelCheckout);
-			checkoutView.add(checkoutPanel);
+			checkoutView.add(checkoutPanel, BorderLayout.SOUTH);
+			
+			JPanel radiocheckoutPanel = new JPanel();
+			JPanel radioPanelPanel = new JPanel();
+			
+			//Adding Radio Buttons for checkout
+			CashRB = new JRadioButton("Cash", true);
+			CashRB.addItemListener(this);
+			CreditDebitRB = new JRadioButton("Credit or Debit Card", false);
+			CreditDebitRB.addItemListener(this);
+			CheckRB = new JRadioButton("CheckRB", false);
+			CheckRB.addItemListener(this);
+			paymentRB.add(CashRB);
+			paymentRB.add(CreditDebitRB);
+			paymentRB.add(CheckRB);
+		
+			radiocheckoutPanel.add(CashRB);
+			radiocheckoutPanel.add(CreditDebitRB);
+			radiocheckoutPanel.add(CheckRB);
+			radioPanelPanel.add(radiocheckoutPanel, new GridLayout(3,1));
+			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
+			
 		}
 		
 	}
-	
-	
+
 	//Order Item Class
 	class OrderItem{
 		String itemName;
