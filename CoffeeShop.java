@@ -238,27 +238,82 @@ public class CoffeeShop extends JFrame implements ActionListener{
 			itemView.add(orderPanel);
 		}
 		if(e.getSource() == mediumButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Medium Roast Coffee");
+			itemView.setVisible(true);
 			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 		}
 		if(e.getSource() == blondeButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Blonde Coffee");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		if(e.getSource() == mochaButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Mocha Coffee");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		if(e.getSource() == vanillaButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Vanilla");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		if(e.getSource() == decafButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Decaf Coffee");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		if(e.getSource() == espressoButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Espresso");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		if(e.getSource() == cocoButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Hot Cocoa");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		if(e.getSource() == teaButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Tea");
+			itemView.setVisible(true);
+			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 			
 		}
 		
