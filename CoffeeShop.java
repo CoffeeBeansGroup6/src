@@ -290,16 +290,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		if(e.getSource() == addItem){
 			//Add item should also close ItemView
 			
-			/*
-			if(smallRB.isSelected()){
-				cart.get(cartItems).size = "Sm.";
-			} else if(mediumRB.isSelected()){
-				cart.get(cartItems).size = "Med.";
-			}else if((largeRB.isSelected())){
-				cart.get(cartItems).size = "Lar.";
-			}
-			*/
-			
 			model.insertRow(cartItems, cart.get(cartItems).getRow());
 			
 			orderTotal = orderTotal.add(cart.get(cartItems).price);
@@ -330,7 +320,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		if(e.getSource() == removeItem){
 			if(checkoutTable.getSelectedRow() > -1) {
-				orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
+				
+				orderTotal = orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
 				orderTotalLbl.setText("$" + orderTotal);
 
 				cart.remove(checkoutTable.getSelectedRow());
