@@ -11,16 +11,15 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -48,6 +47,14 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
 	JButton removeItem = new JButton("Remove Selected Item");
+	
+	//Radio Buttons
+	ButtonGroup size = new ButtonGroup();
+	JRadioButton smallRB, mediumRB, largeRB;
+	
+	ButtonGroup temp = new ButtonGroup();
+	JRadioButton frozenRB, icedRB, hotRB;
+	
 	
 	//Coffee Button Images
 	ImageIcon darkIcon = new ImageIcon(new ImageIcon("dark.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
