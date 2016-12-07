@@ -114,7 +114,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
 		
-		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 20));
+		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 25));
+		checkoutTable.setRowHeight(40);
 		checkoutTable.setGridColor(Color.BLACK);// colors grid lines
 		
 		checkoutTable.getTableHeader().setFont(new Font("Arial",Font.PLAIN, 25));
@@ -378,7 +379,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			NumberFormat money = NumberFormat.getCurrencyInstance();
 			String price$ = money.format(price.doubleValue());
 			
-			String row[] = {itemName, price$};
+			String row[] = {"  " + itemName," " + price$};
 			
 			return row;
 		}
