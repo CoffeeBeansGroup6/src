@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -40,6 +41,9 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	JPanel row1 = new JPanel();
 	JPanel row2 = new JPanel();
 	JPanel row3 = new JPanel();
+	
+	JPanel orderPanel = new JPanel();
+	JFrame itemView = new JFrame();
 
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
@@ -75,6 +79,12 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	DefaultTableModel model;
 	JTable checkoutTable;
 	JScrollPane sp;
+	
+	JButton addItem = new JButton("Add");
+	JButton cancelItem = new JButton("Cancel");
+	
+	int cartItems = 0;
+	BigDecimal orderTotal = new BigDecimal("0.00");
 	
 	public CoffeeShop() {
 		
@@ -120,6 +130,8 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		buttonPanel.setPreferredSize(new Dimension(320,50));
 		eastPanel.setPreferredSize(new Dimension(350,this.getHeight()));
 		
+		addItem.addActionListener(this);
+		cancelItem.addActionListener(this);
 		editItem.addActionListener(this);
 		removeItem.addActionListener(this);
 		checkoutButton.addActionListener(this);
@@ -194,9 +206,25 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		if(e.getSource() == addItem){
+			//Add item should also close ItemView
+			OrderItem item = new OrderItem();
+			cart.add(item);
+			model.insertRow(cartItems, cart.get(cartItems).getRow());
+			
+			orderTotal = orderTotal.add(cart.get(cartItems).price);
+			orderTotalLbl.setText("$" + orderTotal);
+			cartItems++;
+		}
 		//All Item Choice Buttons
 		if(e.getSource() == darkButton){
+			itemView.setSize(400, 400);
+			itemView.setTitle("Dark Roast Coffee");
+			itemView.setVisible(true);
 			
+			orderPanel.add(cancelItem);
+			orderPanel.add(addItem);
+			itemView.add(orderPanel);
 		}
 		if(e.getSource() == mediumButton){
 			
@@ -248,7 +276,12 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		BigDecimal price;
 		
 		public OrderItem(){
-			
+			itemName = "item";
+			price = new BigDecimal("1.00");
+		}
+		
+		public OrderItem(String name){
+			itemName = name;
 		}
 		
 		//returns the string format - item description and price
