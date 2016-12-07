@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -33,6 +35,9 @@ import javax.swing.table.DefaultTableModel;
 
 public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 
+	double price;
+	
+	
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 	
@@ -239,18 +244,24 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 
 		
 		if(e.getSource() == darkButton){
+
+			
 			itemView.setSize(450, 200);
 			itemView.setTitle("Dark Roast Coffee");
 			itemView.setVisible(true);
+			itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			
 			orderPanel.add(cancelItem);
 			orderPanel.add(addItem);
 			itemView.add(orderPanel, BorderLayout.SOUTH);
 			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
+			price = 9.00;
+			JLabel itemtotalLBL = new JLabel("Item Total: $" + price);
 			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 			
 			JPanel radioPanel = new JPanel();
+			itemView.remove(radioPanel);
+
 			
 			itemView.add(radioPanel, BorderLayout.CENTER);
 			
@@ -294,7 +305,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			
 			radioPanel.add(sizePanel);
 			radioPanel.add(tempPanel);
-			
+			if(e.getSource() == cancelItem){
+				itemView.removeAll();
+			}
 			
 		}
 		if(e.getSource() == mediumButton){
@@ -835,8 +848,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
+
 	
 }
