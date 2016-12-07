@@ -287,7 +287,6 @@ public class CoffeeShop extends JFrame implements ActionListener{
 	
 	//Order Item Class
 	class OrderItem{
-		
 		String itemName;
 		BigDecimal price;
 		
@@ -299,13 +298,13 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		public OrderItem(String name){
 			itemName = name;
 		}
-		
+			
 		//returns the string format - item description and price
 		public String[] getRow() {
 			NumberFormat money = NumberFormat.getCurrencyInstance();
 			String price$ = money.format(price.doubleValue());
 			
-			String row[] = { itemName, price$};
+			String row[] = {itemName, price$};
 			
 			return row;
 		}
