@@ -33,11 +33,7 @@ import javax.swing.table.DefaultTableModel;
  * CoffeeShop
  */
 
-public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
-
-	double price;
-	
-	
+public class CoffeeShop extends JFrame implements ActionListener, ItemListener{	
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 	
@@ -52,6 +48,10 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	JPanel checkoutPanel = new JPanel();
 	JFrame itemView = new JFrame();
 	JFrame checkoutView = new JFrame();
+	JLabel itemtotalLBL = new JLabel();
+	JPanel radioPanel = new JPanel();
+	JPanel sizePanel = new JPanel();
+	JPanel tempPanel = new JPanel();
 
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
@@ -59,10 +59,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	
 	//Radio Buttons
 	ButtonGroup size = new ButtonGroup();
-	JRadioButton smallRB, mediumRB, largeRB;
+	JRadioButton smallRB = new JRadioButton("Small", true),
+			mediumRB = new JRadioButton("Medium", false), 
+			largeRB = new JRadioButton("Large", false);
 	
 	ButtonGroup temp = new ButtonGroup();
-	JRadioButton frozenRB, icedRB, hotRB;
+	JRadioButton frozenRB = new JRadioButton("Frozen", false),
+			icedRB = new JRadioButton("Iced", false),
+			hotRB = new JRadioButton("Hot", true);
+
 	
 	ButtonGroup paymentRB = new ButtonGroup();
 	JRadioButton CashRB, CreditDebitRB, CheckRB;
@@ -106,6 +111,30 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	int cartItems = 0;
 	BigDecimal orderTotal = new BigDecimal("0.00");
 	
+	//Order Item Class
+	class OrderItem{
+		String itemName;
+		BigDecimal price;
+		
+		public OrderItem(){
+			itemName = "item";
+			price = new BigDecimal("1.00");
+		}
+		
+		public OrderItem(String name){
+			itemName = name;
+		}
+			
+		//returns the string format - item description and price
+		public String[] getRow() {
+			NumberFormat money = NumberFormat.getCurrencyInstance();
+			String price$ = money.format(price.doubleValue());
+			String row[] = {itemName, price$};
+			return row;
+		}
+		
+	}
+
 	public CoffeeShop() {
 		
 		// Table Settings
@@ -170,6 +199,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		cocoButton.addActionListener(this);
 		teaButton.addActionListener(this);
 		
+		//radio button action listeners
+		smallRB.addActionListener(this);
+		mediumRB.addActionListener(this);
+		largeRB.addActionListener(this);
+		frozenRB.addActionListener(this);
+		hotRB.addActionListener(this);
+		icedRB.addActionListener(this);
+		
+		
 		darkButton.setPreferredSize(new Dimension(225,225));
 		mediumButton.setPreferredSize(new Dimension(225,225));
 		blondeButton.setPreferredSize(new Dimension(225,225));
@@ -232,564 +270,76 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		if(e.getSource() == addItem){
 			//Add item should also close ItemView
-			OrderItem item = new OrderItem();
-			cart.add(item);
 			model.insertRow(cartItems, cart.get(cartItems).getRow());
 			
 			orderTotal = orderTotal.add(cart.get(cartItems).price);
 			orderTotalLbl.setText("$" + orderTotal);
 			cartItems++;
+			orderPanel.removeAll();
+			radioPanel.removeAll();
+			sizePanel.removeAll();
+			tempPanel.removeAll();
+			itemView.dispose();
 		}
-		
-
-		
-		if(e.getSource() == darkButton){
-
-			
-			itemView.setSize(450, 200);
-			itemView.setTitle("Dark Roast Coffee");
-			itemView.setVisible(true);
-			itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			price = 9.00;
-			JLabel itemtotalLBL = new JLabel("Item Total: $" + price);
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			itemView.remove(radioPanel);
-
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			if(e.getSource() == cancelItem){
-				itemView.removeAll();
-			}
-			
-		}
-		if(e.getSource() == mediumButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Medium Roast Coffee");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-		}
-		if(e.getSource() == blondeButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Blonde Roast Coffee");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-			
-			
-		}
-		if(e.getSource() == mochaButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Cafe Mocha");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-		}
-		if(e.getSource() == vanillaButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Vanilla Latte");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-		}
-		if(e.getSource() == decafButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Decaf Coffee");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-		}
-		if(e.getSource() == espressoButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Espresso");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-			frozenRB = new JRadioButton("Frozen", false);
-			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-		}
-		if(e.getSource() == cocoButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Hot Chocolate");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-//			frozenRB = new JRadioButton("Frozen", false);
-//			frozenRB.addItemListener(this);
-//			icedRB = new JRadioButton("Iced", false);
-//			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-//			temp.add(frozenRB);
-//			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-//			tempPanel.add(frozenRB);
-//			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-		}
-		if(e.getSource() == teaButton){
-			itemView.setSize(400, 400);
-			itemView.setTitle("Tea");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-//			frozenRB = new JRadioButton("Frozen", false);
-//			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-//			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-//			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-			
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
-		}
-		
-		
 		//-----East Panel Buttons-----------
 		if(e.getSource() == editItem){
-			
+			if(checkoutTable.getSelectedRow() > -1) {
+				OrderItem item = cart.get(checkoutTable.getSelectedRow());
+				itemView.setSize(450, 200);
+				itemView.setTitle(item.itemName);
+				itemView.setVisible(true);
+				itemView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			}
 		}
 		
 		if(e.getSource() == removeItem){
-			if (checkoutTable.getSelectedRow() > -1) {
-				price -= cart.get(checkoutTable.getSelectedRow()).price.doubleValue();
-				orderTotalLbl.setText("$" + Math.round(100.00 * price) / 100.00);
+			if(checkoutTable.getSelectedRow() > -1) {
+				orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
+				orderTotalLbl.setText("$" + orderTotal);
 
 				cart.remove(checkoutTable.getSelectedRow());
 				model.removeRow(checkoutTable.getSelectedRow());
+				cartItems--;
 			}
+		}
+		//----------------------------------
+		//Cancel order item - removes item from cart and closes window
+		if(e.getSource() == cancelItem){
+			cart.remove(cart.size()-1);
+			cartItems--;
+			orderPanel.removeAll();
+			radioPanel.removeAll();
+			sizePanel.removeAll();
+			tempPanel.removeAll();
+			itemView.dispose();
+		}
+		//All JButtons Point to functions
+		if(e.getSource() == darkButton){
+			plainCoffeeFrame("Dark Roast Coffee", 4.50);
+		}
+		if(e.getSource() == mediumButton){
+			plainCoffeeFrame("Medium Roast Coffee", 5.00);
+		}
+		if(e.getSource() == blondeButton){
+			plainCoffeeFrame("Blonde Roast Coffee", 5.50);
+		}
+		if(e.getSource() == mochaButton){
+			specialCoffeeFrame("Caffe Mocha", 6.00);
+		}
+		if(e.getSource() == vanillaButton){
+			specialCoffeeFrame("Vanilla Latte", 6.50);
+		}
+		if(e.getSource() == decafButton){
+			plainCoffeeFrame("Decaf Coffee", 4.50);
+		}
+		if(e.getSource() == espressoButton){
+			nonCoffeeFrame("Espresso", 4.00);
+		}
+		if(e.getSource() == cocoButton){
+			nonCoffeeFrame("Hot Chocolate", 3.50);
+		}
+		if(e.getSource() == teaButton){
+			nonCoffeeFrame("Tea", 3.50);
 		}
 		
 		//All Check Out screens carried out here
@@ -820,38 +370,148 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			radiocheckoutPanel.add(CheckRB);
 			radioPanelPanel.add(radiocheckoutPanel, new GridLayout(3,1));
 			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
-			
 		}
 		
 	}
-
-	//Order Item Class
-	class OrderItem{
-		String itemName;
-		BigDecimal price;
+	//Function for Regular Coffees
+	public void plainCoffeeFrame(String itemName, double price){
+		//Sets title name for later use
+		OrderItem item = new OrderItem();
+		item.itemName = itemName;
+		itemView.setSize(200, 200);
+		itemView.setTitle(item.itemName);
+		itemView.setVisible(true);
+		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		public OrderItem(){
-			itemName = "item";
-			price = new BigDecimal("1.00");
-		}
+		orderPanel.add(cancelItem);
+		orderPanel.add(addItem);
+		itemView.add(orderPanel, BorderLayout.SOUTH);
 		
-		public OrderItem(String name){
-			itemName = name;
-		}
-			
-		//returns the string format - item description and price
-		public String[] getRow() {
-			NumberFormat money = NumberFormat.getCurrencyInstance();
-			String price$ = money.format(price.doubleValue());
-			
-			String row[] = {itemName, price$};
-			
-			return row;
-		}
+		//Coffee Name and Price
+		item.price = new BigDecimal(price);
+		NumberFormat money = NumberFormat.getCurrencyInstance();
+		String price$ = money.format(item.price.doubleValue());
+		//------------
+		itemtotalLBL.setText("Item Total: "+ price$);
+		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
+		itemView.add(radioPanel, BorderLayout.CENTER);
 		
+		//adding size radio buttons
+		size.add(smallRB);
+		size.add(mediumRB);
+		size.add(largeRB);
+		
+		sizePanel.setLayout(new GridLayout(3,1));
+		sizePanel.add(smallRB);
+		sizePanel.add(mediumRB);
+		sizePanel.add(largeRB);
+		
+		//adding temp radio buttons
+		temp.add(icedRB);
+		temp.add(hotRB);
+		
+		tempPanel.setLayout(new GridLayout(3,1));
+		tempPanel.add(icedRB);
+		tempPanel.add(hotRB);
+		
+		radioPanel.add(sizePanel);
+		radioPanel.add(tempPanel);
+		cart.add(item);
 	}
-
-
+	//Function for specialty coffees (frozen)
+	public void specialCoffeeFrame(String itemName, double price){
+		//Sets title name for later use
+		OrderItem item = new OrderItem();
+		item.itemName = itemName;
+		itemView.setSize(450, 200);
+		itemView.setTitle(item.itemName);
+		itemView.setVisible(true);
+		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		orderPanel.add(cancelItem);
+		orderPanel.add(addItem);
+		itemView.add(orderPanel, BorderLayout.SOUTH);
+		
+		//Coffee Name and Price
+		item.price = new BigDecimal(price);
+		NumberFormat money = NumberFormat.getCurrencyInstance();
+		String price$ = money.format(item.price.doubleValue());
+		//------------
+		itemtotalLBL.setText("Item Total: "+ price$);
+		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
+		itemView.add(radioPanel, BorderLayout.CENTER);
+		
+		//adding size radio buttons
+		size.add(smallRB);
+		size.add(mediumRB);
+		size.add(largeRB);
+		
+		sizePanel.setLayout(new GridLayout(3,1));
+		sizePanel.add(smallRB);
+		sizePanel.add(mediumRB);
+		sizePanel.add(largeRB);
+		
+		//adding temp radio buttons
+		temp.add(frozenRB);
+		temp.add(icedRB);
+		temp.add(hotRB);
+		
+		tempPanel.setLayout(new GridLayout(3,1));
+		tempPanel.add(frozenRB);
+		tempPanel.add(icedRB);
+		tempPanel.add(hotRB);
+		
+		radioPanel.add(sizePanel);
+		radioPanel.add(tempPanel);
+		cart.add(item);
+	}
+	//Function for all other items besides coffees
+	public void nonCoffeeFrame(String itemName, double price){
+		//Sets title name for later use
+		OrderItem item = new OrderItem();
+		item.itemName = itemName;
+		itemView.setSize(450, 200);
+		itemView.setTitle(item.itemName);
+		itemView.setVisible(true);
+		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		orderPanel.add(cancelItem);
+		orderPanel.add(addItem);
+		itemView.add(orderPanel, BorderLayout.SOUTH);
+		
+		//Coffee Name and Price
+		item.price = new BigDecimal(price);
+		NumberFormat money = NumberFormat.getCurrencyInstance();
+		String price$ = money.format(item.price.doubleValue());
+		//------------
+		itemtotalLBL.setText("Item Total: "+ price$);
+		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
+		itemView.add(radioPanel, BorderLayout.CENTER);
+		
+		//adding size radio buttons
+		size.add(smallRB);
+		size.add(mediumRB);
+		size.add(largeRB);
+		
+		sizePanel.setLayout(new GridLayout(3,1));
+		sizePanel.add(smallRB);
+		sizePanel.add(mediumRB);
+		sizePanel.add(largeRB);
+		
+		//adding temp radio buttons
+		temp.add(frozenRB);
+		temp.add(icedRB);
+		temp.add(hotRB);
+		
+		tempPanel.setLayout(new GridLayout(3,1));
+		tempPanel.add(frozenRB);
+		tempPanel.add(icedRB);
+		tempPanel.add(hotRB);
+		
+		radioPanel.add(sizePanel);
+		radioPanel.add(tempPanel);
+		cart.add(item);
+	}
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
