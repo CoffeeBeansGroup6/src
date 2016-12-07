@@ -58,15 +58,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	JButton removeItem = new JButton("Remove Selected Item");
 	
 	//Radio Buttons
-	ButtonGroup size = new ButtonGroup();
-	JRadioButton smallRB = new JRadioButton("Small", true),
-			mediumRB = new JRadioButton("Medium", false), 
-			largeRB = new JRadioButton("Large", false);
+	ButtonGroup sizeGroup = new ButtonGroup();
+	JRadioButton smallRB = new JRadioButton("Small",true),
+			mediumRB = new JRadioButton("Medium (+ $1)", false), 
+			largeRB = new JRadioButton("Large (+ $3)", false);
 	
-	ButtonGroup temp = new ButtonGroup();
-	JRadioButton frozenRB = new JRadioButton("Frozen", false),
-			icedRB = new JRadioButton("Iced", false),
-			hotRB = new JRadioButton("Hot", true);
+	ButtonGroup tempGroup = new ButtonGroup();
+	JRadioButton frozenRB = new JRadioButton("Frozen ", false),
+			icedRB = new JRadioButton("Iced ", false),
+			hotRB = new JRadioButton("Hot ", true);
 
 	
 	ButtonGroup paymentRB = new ButtonGroup();
@@ -110,16 +110,22 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	
 	int cartItems = 0;
 	BigDecimal orderTotal = new BigDecimal("0.00");
+	BigDecimal one = new BigDecimal("1");
+	BigDecimal three = new BigDecimal("3");
 	
 	//Order Item Class
 	class OrderItem{
 		String CoffeeType;
 		String itemName;
 		BigDecimal price;
+		String size;
+		String temp;
 		
 		public OrderItem(){
 			itemName = "item";
 			price = new BigDecimal("1.00");
+			size = "Small";
+			temp = "Hot ";
 		}
 		
 		public OrderItem(String name){
@@ -130,7 +136,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		public String[] getRow() {
 			NumberFormat money = NumberFormat.getCurrencyInstance();
 			String price$ = money.format(price.doubleValue());
-			String row[] = {itemName, price$};
+			String row[] = {size + " " + temp +itemName, price$};
 			return row;
 		}
 		
@@ -152,9 +158,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
 		
-		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 25));
 		checkoutTable.setRowHeight(40);
-		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 20));
+		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 13));
 
 		checkoutTable.setGridColor(Color.BLACK);// colors grid lines
 		
@@ -201,12 +206,16 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		teaButton.addActionListener(this);
 		
 		//radio button action listeners
-		smallRB.addActionListener(this);
-		mediumRB.addActionListener(this);
-		largeRB.addActionListener(this);
-		frozenRB.addActionListener(this);
-		hotRB.addActionListener(this);
-		icedRB.addActionListener(this);
+		smallRB.addItemListener(this);
+		mediumRB.addItemListener(this);
+		largeRB.addItemListener(this);
+		frozenRB.addItemListener(this);
+		hotRB.addItemListener(this);
+		icedRB.addItemListener(this);
+		
+		sizeGroup.add(smallRB);
+		sizeGroup.add(mediumRB);
+		sizeGroup.add(largeRB);
 		
 		
 		darkButton.setPreferredSize(new Dimension(225,225));
@@ -271,10 +280,22 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		if(e.getSource() == addItem){
 			//Add item should also close ItemView
+			
+			/*
+			if(smallRB.isSelected()){
+				cart.get(cartItems).size = "Sm.";
+			} else if(mediumRB.isSelected()){
+				cart.get(cartItems).size = "Med.";
+			}else if((largeRB.isSelected())){
+				cart.get(cartItems).size = "Lar.";
+			}
+			*/
+			
 			model.insertRow(cartItems, cart.get(cartItems).getRow());
 			
 			orderTotal = orderTotal.add(cart.get(cartItems).price);
 			orderTotalLbl.setText("$" + orderTotal);
+			
 			cartItems++;
 			orderPanel.removeAll();
 			radioPanel.removeAll();
@@ -321,31 +342,31 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		}
 		//All JButtons Point to functions
 		if(e.getSource() == darkButton){
-			plainCoffeeFrame("Dark Roast Coffee", 4.50);
+			plainCoffeeFrame("Dark Roast Coffee", 4.00);
 		}
 		if(e.getSource() == mediumButton){
-			plainCoffeeFrame("Medium Roast Coffee", 5.00);
+			plainCoffeeFrame("Medium Roast Coffee", 4.00);
 		}
 		if(e.getSource() == blondeButton){
-			plainCoffeeFrame("Blonde Roast Coffee", 5.50);
+			plainCoffeeFrame("Blonde Roast Coffee", 4.00);
 		}
 		if(e.getSource() == mochaButton){
-			specialCoffeeFrame("Caffe Mocha", 6.00);
+			specialCoffeeFrame("Caffe Mocha", 5.00);
 		}
 		if(e.getSource() == vanillaButton){
-			specialCoffeeFrame("Vanilla Latte", 6.50);
+			specialCoffeeFrame("Vanilla Latte", 5.00);
 		}
 		if(e.getSource() == decafButton){
-			plainCoffeeFrame("Decaf Coffee", 4.50);
+			plainCoffeeFrame("Decaf Coffee", 5.00);
 		}
 		if(e.getSource() == espressoButton){
-			nonCoffeeFrame("Espresso", 4.00);
+			nonCoffeeFrame("Espresso", 3.00);
 		}
 		if(e.getSource() == cocoButton){
-			nonCoffeeFrame("Hot Chocolate", 3.50);
+			nonCoffeeFrame("Hot Chocolate", 3.00);
 		}
 		if(e.getSource() == teaButton){
-			nonCoffeeFrame("Tea", 3.50);
+			nonCoffeeFrame("Tea", 3.00);
 		}
 		
 		//All Check Out screens carried out here
@@ -382,7 +403,10 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	//Function for Regular Coffees
 	public void plainCoffeeFrame(String itemName, double price){
 		//Sets title name for later use
+		
 		OrderItem item = new OrderItem();
+		cart.add(item);
+		
 		item.CoffeeType = "plain";
 		item.itemName = itemName;
 		itemView.setSize(300, 300);
@@ -404,18 +428,22 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		itemView.add(radioPanel, BorderLayout.CENTER);
 		
 		//adding size radio buttons
-		size.add(smallRB);
-		size.add(mediumRB);
-		size.add(largeRB);
-		
 		sizePanel.setLayout(new GridLayout(3,1));
 		sizePanel.add(smallRB);
 		sizePanel.add(mediumRB);
 		sizePanel.add(largeRB);
 		
+		//resetting selections
+		sizeGroup.clearSelection();
+		smallRB.setSelected(true);
+		
 		//adding temp radio buttons
-		temp.add(icedRB);
-		temp.add(hotRB);
+		tempGroup.add(icedRB);
+		tempGroup.add(hotRB);
+		
+		//resetting selections
+		tempGroup.clearSelection();
+		hotRB.setSelected(true);
 		
 		tempPanel.setLayout(new GridLayout(3,1));
 		tempPanel.add(icedRB);
@@ -423,12 +451,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		radioPanel.add(sizePanel);
 		radioPanel.add(tempPanel);
-		cart.add(item);
 	}
 	//Function for specialty coffees (frozen)
 	public void specialCoffeeFrame(String itemName, double price){
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
+		cart.add(item);
+		
 		item.CoffeeType = "special";
 		item.itemName = itemName;
 		itemView.setSize(300, 300);
@@ -449,20 +478,21 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 		itemView.add(radioPanel, BorderLayout.CENTER);
 		
-		//adding size radio buttons
-		size.add(smallRB);
-		size.add(mediumRB);
-		size.add(largeRB);
-		
 		sizePanel.setLayout(new GridLayout(3,1));
 		sizePanel.add(smallRB);
 		sizePanel.add(mediumRB);
 		sizePanel.add(largeRB);
 		
+		sizeGroup.clearSelection();
+		smallRB.setSelected(true);
+		
 		//adding temp radio buttons
-		temp.add(frozenRB);
-		temp.add(icedRB);
-		temp.add(hotRB);
+		tempGroup.add(frozenRB);
+		tempGroup.add(icedRB);
+		tempGroup.add(hotRB);
+		
+		tempGroup.clearSelection();
+		hotRB.setSelected(true);
 		
 		tempPanel.setLayout(new GridLayout(3,1));
 		tempPanel.add(frozenRB);
@@ -471,12 +501,14 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		radioPanel.add(sizePanel);
 		radioPanel.add(tempPanel);
-		cart.add(item);
 	}
+	
 	//Function for all other items besides coffees
 	public void nonCoffeeFrame(String itemName, double price){
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
+		cart.add(item);
+		
 		item.itemName = itemName;
 		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
@@ -496,34 +528,59 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 		itemView.add(radioPanel, BorderLayout.CENTER);
 		
-		//adding size radio buttons
-		size.add(smallRB);
-		size.add(mediumRB);
-		size.add(largeRB);
-		
 		sizePanel.setLayout(new GridLayout(3,1));
 		sizePanel.add(smallRB);
 		sizePanel.add(mediumRB);
 		sizePanel.add(largeRB);
 		
+		sizeGroup.clearSelection();
+		smallRB.setSelected(true);
+		
 		//adding temp radio buttons
-		temp.add(frozenRB);
-		temp.add(icedRB);
-		temp.add(hotRB);
+		
 		
 		tempPanel.setLayout(new GridLayout(3,1));
-		tempPanel.add(frozenRB);
-		tempPanel.add(icedRB);
-		tempPanel.add(hotRB);
+		
+		//HOT Chocolate can only be hot.
+		if(itemName != "Hot Chocolate"){
+			tempGroup.add(frozenRB);
+			tempGroup.add(icedRB);
+			tempGroup.add(hotRB);
+			
+			tempGroup.clearSelection();
+			hotRB.setSelected(true);
+			
+			tempPanel.add(frozenRB);
+			tempPanel.add(icedRB);
+			tempPanel.add(hotRB);
+		}else{
+			item.temp = "";
+		}
 		
 		radioPanel.add(sizePanel);
 		radioPanel.add(tempPanel);
-		cart.add(item);
 	}
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
+		if(e.getSource() == smallRB){
+			cart.get(cartItems).size = "Small";
+		} else if(e.getSource() == mediumRB){
+			cart.get(cartItems).size = "Medium";
+			//cart.get(cartItems).price = cart.get(cartItems).price.add(one);
+		} else if(e.getSource() == largeRB){
+			cart.get(cartItems).size = "Large";
+			//cart.get(cartItems).price = cart.get(cartItems).price.add(three);
+		}
 		
+		if(e.getSource() == frozenRB){
+			cart.get(cartItems).temp = "Frozen ";
+		} else if(e.getSource() == icedRB){
+			cart.get(cartItems).temp = "Iced ";
+		} else if(e.getSource() == hotRB){
+			cart.get(cartItems).temp = "Hot ";
+		}
 	}
 
 	
