@@ -227,7 +227,15 @@ public class CoffeeShop extends JFrame implements ActionListener{
 			orderTotalLbl.setText("$" + orderTotal);
 			cartItems++;
 		}
+		
+//		//Radio Buttons
+//		ButtonGroup size = new ButtonGroup();
+//		JRadioButton smallRB, mediumRB, largeRB;
+//		
+//		ButtonGroup temp = new ButtonGroup();
+//		JRadioButton frozenRB, icedRB, hotRB;
 		//All Item Choice Buttons
+		
 		if(e.getSource() == darkButton){
 			itemView.setSize(400, 400);
 			itemView.setTitle("Dark Roast Coffee");
@@ -236,6 +244,11 @@ public class CoffeeShop extends JFrame implements ActionListener{
 			orderPanel.add(cancelItem);
 			orderPanel.add(addItem);
 			itemView.add(orderPanel);
+			
+			smallRB = new JRadioButton("Small", true);
+			smallRB.setFont(Arial);
+			smallRB.addItemListener(this);
+			
 		}
 		if(e.getSource() == mediumButton){
 			itemView.setSize(400, 400);
@@ -248,7 +261,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == blondeButton){
 			itemView.setSize(400, 400);
-			itemView.setTitle("Blonde Coffee");
+			itemView.setTitle("Blonde Roast Coffee");
 			itemView.setVisible(true);
 			
 			orderPanel.add(cancelItem);
@@ -258,7 +271,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == mochaButton){
 			itemView.setSize(400, 400);
-			itemView.setTitle("Mocha Coffee");
+			itemView.setTitle("Cafe Mocha");
 			itemView.setVisible(true);
 			
 			orderPanel.add(cancelItem);
@@ -268,7 +281,7 @@ public class CoffeeShop extends JFrame implements ActionListener{
 		}
 		if(e.getSource() == vanillaButton){
 			itemView.setSize(400, 400);
-			itemView.setTitle("Vanilla");
+			itemView.setTitle("Vanilla Latte");
 			itemView.setVisible(true);
 			
 			orderPanel.add(cancelItem);
