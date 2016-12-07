@@ -114,8 +114,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		Object[] columns = { "      Order Item" , "  Price" };
 		model.setColumnIdentifiers(columns);
 		
+<<<<<<< HEAD
 		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 25));
 		checkoutTable.setRowHeight(40);
+=======
+		checkoutTable.setFont(new Font("Arial", Font.PLAIN, 20));
+>>>>>>> parent of 35269d7... added radio buttons
 		checkoutTable.setGridColor(Color.BLACK);// colors grid lines
 		
 		checkoutTable.getTableHeader().setFont(new Font("Arial",Font.PLAIN, 25));
@@ -254,8 +258,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			mediumRB.addItemListener(this);
 			largeRB = new JRadioButton("Large", false);
 			largeRB.addItemListener(this);
+<<<<<<< HEAD
 			
 			
+=======
+		
+>>>>>>> parent of 35269d7... added radio buttons
 			
 		}
 		if(e.getSource() == mediumButton){
@@ -380,7 +388,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			NumberFormat money = NumberFormat.getCurrencyInstance();
 			String price$ = money.format(price.doubleValue());
 			
+<<<<<<< HEAD
 			String row[] = {"  " + itemName," " + price$};
+=======
+			String row[] = {itemName, price$};
+>>>>>>> parent of 35269d7... added radio buttons
 			
 			return row;
 		}
