@@ -59,6 +59,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	ButtonGroup temp = new ButtonGroup();
 	JRadioButton frozenRB, icedRB, hotRB;
 	
+	ButtonGroup paymentRB = new ButtonGroup();
+	JRadioButton CashRB, CreditDebitRB, CheckRB;
+	
 	
 	//Coffee Button Images
 	ImageIcon darkIcon = new ImageIcon(new ImageIcon("dark.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
