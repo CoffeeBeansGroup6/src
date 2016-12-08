@@ -332,8 +332,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		//----------------------------------
 		//Cancel order item - removes item from cart and closes window
 		if(e.getSource() == cancelItem){
-			cart.remove(cart.size()-1);
-			cartItems--;
+			
+			if(cartItems > -1){
+				cart.remove(cart.size()-1);
+			}
+
 			orderPanel.removeAll();
 			radioPanel.removeAll();
 			sizePanel.removeAll();
@@ -409,6 +412,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		item.CoffeeType = "plain";
 		item.itemName = itemName;
+		itemView.setUndecorated(true);
+		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
 		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
@@ -460,6 +465,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		item.CoffeeType = "special";
 		item.itemName = itemName;
+		itemView.setUndecorated(true);
+		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
 		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
@@ -510,6 +517,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		cart.add(item);
 		
 		item.itemName = itemName;
+		itemView.setUndecorated(true);
+		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
 		itemView.setSize(300, 300);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
