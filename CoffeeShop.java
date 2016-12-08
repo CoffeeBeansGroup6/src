@@ -35,7 +35,7 @@ import javax.swing.table.DefaultTableModel;
  * CoffeeShop
  */
 
-public class CoffeeShop extends JFrame implements ActionListener, ItemListener, Printable{	
+public class CoffeeShop extends JFrame implements ActionListener, ItemListener {	
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 	
@@ -692,6 +692,24 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener, 
 		radioPanel.add(tempPanel);
 	}
 	
+	public void generateReceipt() {
+		ReceiptPanel ReceiptPanel = new ReceiptPanel();
+		JFrame printscreen = new JFrame();
+		
+		
+	}
+	
+	// custom JPanel for on screen receipt
+	class ReceiptPanel extends JPanel implements Printable {
+
+		@Override
+		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
+	}
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
@@ -712,11 +730,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener, 
 		}
 	}
 
-	@Override
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
+
+
 
 	
 }
