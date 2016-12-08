@@ -419,9 +419,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			nonCoffeeFrame("Hot Chocolate", 3.00);
 		}
 		if(e.getSource() == teaButton){
-<<<<<<< Updated upstream
+
 			nonCoffeeFrame("Tea", 3.00);
-=======
+
 			itemView.setSize(400, 400);
 			itemView.setTitle("Tea");
 			itemView.setVisible(true);
@@ -445,9 +445,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			mediumRB.addItemListener(this);
 			largeRB = new JRadioButton("Large", false);
 			largeRB.addItemListener(this);
-			size.add(smallRB);
-			size.add(mediumRB);
-			size.add(largeRB);
+			sizeGroup.add(smallRB);
+			sizeGroup.add(mediumRB);
+			sizeGroup.add(largeRB);
 			
 			
 			JPanel sizePanel = new JPanel();
@@ -464,8 +464,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 			hotRB = new JRadioButton("Hot", true);
 			largeRB.addItemListener(this);
 //			temp.add(frozenRB);
-			temp.add(icedRB);
-			temp.add(hotRB);
+			tempGroup.add(icedRB);
+			tempGroup.add(hotRB);
 			
 			
 			JPanel tempPanel = new JPanel();
@@ -488,7 +488,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		
 		if(e.getSource() == removeItem){
 			
->>>>>>> Stashed changes
+
 		}
 		
 		//All Check Out screens carried out here
