@@ -108,6 +108,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 	JButton cancelItem = new JButton("Cancel");
 	JButton cancelCheckout = new JButton("Cancel");
 	
+	//For edit selected item
+	JButton doneEditing = new JButton("Done");
+	
 	int cartItems = 0;
 	BigDecimal orderTotal = new BigDecimal("0.00");
 	BigDecimal one = new BigDecimal("1");
@@ -222,6 +225,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		hotRB.addItemListener(this);
 		icedRB.addItemListener(this);
 		
+		//edit selected item button
+		doneEditing.addActionListener(this);
+		
 		sizeGroup.add(smallRB);
 		sizeGroup.add(mediumRB);
 		sizeGroup.add(largeRB);
@@ -306,16 +312,60 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener{
 		if(e.getSource() == editItem){
 			if(checkoutTable.getSelectedRow() > -1) {
 				OrderItem item = cart.get(checkoutTable.getSelectedRow());
-				if(item.CoffeeType == "plain"){
-					plainCoffeeFrame(item.itemName, item.price.doubleValue());
-				}
-				else if(item.CoffeeType == "special"){
-					specialCoffeeFrame(item.itemName, item.price.doubleValue());
-				}
-				else{
-					nonCoffeeFrame(item.itemName, item.price.doubleValue());
-				}
+				//Sets title name for later use
+				itemView.setUndecorated(true);
+				itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
+				itemView.setSize(300, 300);
+				itemView.setTitle(item.itemName);
+				itemView.setVisible(true);
+				itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+				orderPanel.add(doneEditing);
+				itemView.add(orderPanel, BorderLayout.SOUTH);
+				//Coffee Name and Price
+				NumberFormat money = NumberFormat.getCurrencyInstance();
+				String price$ = money.format(item.price.doubleValue());
+				//------------
+				itemtotalLBL.setText("Item Total: "+ price$);
+				orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
+				itemView.add(radioPanel, BorderLayout.CENTER);
+				
+				//adding size radio buttons
+				sizePanel.setLayout(new GridLayout(3,1));
+				sizePanel.add(smallRB);
+				sizePanel.add(mediumRB);
+				sizePanel.add(largeRB);
+				
+				//adding temp radio buttons
+				tempGroup.add(icedRB);
+				tempGroup.add(hotRB);
+				
+				//resetting selections
+				tempPanel.setLayout(new GridLayout(3,1));
+				tempPanel.add(icedRB);
+				tempPanel.add(hotRB);
+				
+				radioPanel.add(sizePanel);
+				radioPanel.add(tempPanel);
+				orderTotal = orderTotal.subtract(item.price);
+				orderTotalLbl.setText("$" + orderTotal);
 			}
+		}
+		
+		if(e.getSource() == doneEditing){
+			OrderItem item = cart.get(checkoutTable.getSelectedRow());
+			//int row = checkoutTable.getSelectedRow();
+			//model.removeRow(checkoutTable.getSelectedRow());
+			//model.insertRow(row, item.getRow());
+			
+			orderTotal = orderTotal.add(item.price);
+			orderTotalLbl.setText("$" + orderTotal);
+			
+			orderPanel.removeAll();
+			radioPanel.removeAll();
+			sizePanel.removeAll();
+			tempPanel.removeAll();
+			itemView.dispose();
 		}
 		
 		if(e.getSource() == removeItem){
