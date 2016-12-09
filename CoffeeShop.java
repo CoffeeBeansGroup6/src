@@ -421,65 +421,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			nonCoffeeFrame("Hot Chocolate", 3.00);
 		}
 		if(e.getSource() == teaButton){
-
 			nonCoffeeFrame("Tea", 3.00);
-
-			itemView.setSize(400, 400);
-			itemView.setTitle("Tea");
-			itemView.setVisible(true);
-			
-			orderPanel.add(cancelItem);
-			orderPanel.add(addItem);
-			itemView.add(orderPanel, BorderLayout.SOUTH);
-			
-			JLabel itemtotalLBL = new JLabel("Item Total:");
-			orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-			
-			JPanel radioPanel = new JPanel();
-			
-			itemView.add(radioPanel, BorderLayout.CENTER);
-			
-			//adding size radio buttons
-			
-			smallRB = new JRadioButton("Small", true);
-			smallRB.addItemListener(this);
-			mediumRB = new JRadioButton("Medium", false);
-			mediumRB.addItemListener(this);
-			largeRB = new JRadioButton("Large", false);
-			largeRB.addItemListener(this);
-			sizeGroup.add(smallRB);
-			sizeGroup.add(mediumRB);
-			sizeGroup.add(largeRB);
-			
-			
-			JPanel sizePanel = new JPanel();
-			sizePanel.setLayout(new GridLayout(3,1));
-			sizePanel.add(smallRB);
-			sizePanel.add(mediumRB);
-			sizePanel.add(largeRB);
-			
-			//adding temp radio buttons
-//			frozenRB = new JRadioButton("Frozen", false);
-//			frozenRB.addItemListener(this);
-			icedRB = new JRadioButton("Iced", false);
-			icedRB.addItemListener(this);
-			hotRB = new JRadioButton("Hot", true);
-			largeRB.addItemListener(this);
-//			temp.add(frozenRB);
-			tempGroup.add(icedRB);
-			tempGroup.add(hotRB);
-			
-			
-			JPanel tempPanel = new JPanel();
-			tempPanel.setLayout(new GridLayout(3,1));
-//			tempPanel.add(frozenRB);
-			tempPanel.add(icedRB);
-			tempPanel.add(hotRB);
-			
-	
-			radioPanel.add(sizePanel);
-			radioPanel.add(tempPanel);
-			
 		}
 		
 		
