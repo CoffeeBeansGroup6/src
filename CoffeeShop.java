@@ -3,8 +3,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -12,9 +14,12 @@ import java.awt.event.ItemListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -22,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -75,6 +81,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	
 	ButtonGroup paymentRB = new ButtonGroup();
 	JRadioButton CashRB, CreditDebitRB, CheckRB;
+	
+	JButton PrintReceipt = new JButton("Print Receipt");
 	
 	
 	//Coffee Button Images
@@ -235,6 +243,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		frozenRB.addItemListener(this);
 		hotRB.addItemListener(this);
 		icedRB.addItemListener(this);
+		
+		//radio button checkout item listeners
+		
 		
 		//added all size radio buttons to size group
 		sizeGroup.add(smallRB);
@@ -499,16 +510,29 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			CreditDebitRB = new JRadioButton("Credit or Debit Card", false);
 			CreditDebitRB.addItemListener(this);
 			CheckRB = new JRadioButton("Check", false);
+			PrintReceipt = new JButton("Print Receipt");
 			CheckRB.addItemListener(this);
 			paymentRB.add(CashRB);
 			paymentRB.add(CreditDebitRB);
 			paymentRB.add(CheckRB);
+			paymentRB.add(PrintReceipt);
 		
 			radiocheckoutPanel.add(CashRB);
 			radiocheckoutPanel.add(CreditDebitRB);
 			radiocheckoutPanel.add(CheckRB);
+			radiocheckoutPanel.add(PrintReceipt);
 			radioPanelPanel.add(radiocheckoutPanel, new GridLayout(3,1));
 			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
+		}
+		if(e.getSource() == PrintReceipt){
+			if (cart.size() > 0) {
+				generateReceipt();
+				
+			} else {
+				JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out",
+						"Attention", 0);
+
+			}
 		}
 		
 	}
@@ -569,6 +593,18 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		radioPanel.add(sizePanel);
 		radioPanel.add(tempPanel);
+	}
+	
+	public void CreditDebitFrame (){
+		
+	}
+	
+	public void CashFrame(){
+		
+	}
+	
+	public void CheckFrame(){
+		
 	}
 	
 	//Creates Specialty Coffee Pop Up Frame
@@ -693,18 +729,63 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		ReceiptPanel ReceiptPanel = new ReceiptPanel();
 		JFrame printscreen = new JFrame();
 		
+		printscreen.setSize(new Dimension(260, 320 + 16*cart.size()));
+		printscreen.add(ReceiptPanel);
+		printscreen.setTitle("Receipt");
+		printscreen.setVisible(true);
+		
+		PrinterJob job = PrinterJob.getPrinterJob();
+		job.setPrintable(ReceiptPanel);
+		if (job.printDialog()) {
+			try {
+				job.print();
+			} catch (PrinterException x_x) {
+				System.out.println("Error printing: " + x_x);
+			}
+		}
+		
+		
+	}
+	
+	public void checkout() {
 		
 	}
 	
 	// custom JPanel for on screen receipt
 	class ReceiptPanel extends JPanel implements Printable {
+		
+		public void paintComponent(Graphics graphics) {
+			super.paintComponent(graphics);
 
+			this.setLayout(null);
+			
+			Graphics2D g2d = (Graphics2D) graphics;
+			RenderingHints hints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+			g2d.setRenderingHints(hints);
+			
+			
+
+		
+		
+		
+		
+		
+		
+		
+		}
 		@Override
 		public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 			// TODO Auto-generated method stub
-			return 0;
+			if (pageIndex > 0) {
+				return (NO_SUCH_PAGE);
+			} else {
+				Graphics2D g2d = (Graphics2D) graphics;
+				g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+				paint(g2d);
+				return (PAGE_EXISTS);
+			}
 		}
-		
 	}
 	
 	//Radio Buttons happen here
