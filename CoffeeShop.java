@@ -424,17 +424,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			nonCoffeeFrame("Tea", 3.00);
 		}
 		
-		
-		//-----East Panel Buttons-----------
-		if(e.getSource() == editItem){
-			
-		}
-		
-		if(e.getSource() == removeItem){
-			
-
-		}
-		
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
 			checkoutView.setSize(400, 400);
