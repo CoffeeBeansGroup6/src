@@ -36,6 +36,7 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class CoffeeShop extends JFrame implements ActionListener, ItemListener {	
+	
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 	
@@ -62,8 +63,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	//Radio Buttons
 	ButtonGroup sizeGroup = new ButtonGroup();
 	JRadioButton smallRB = new JRadioButton("Small",true),
-			mediumRB = new JRadioButton("Medium (+ $1)", false), 
-			largeRB = new JRadioButton("Large (+ $3)", false);
+			mediumRB = new JRadioButton("Medium (+ $1.00)", false), 
+			largeRB = new JRadioButton("Large (+ $3.00)", false);
 	
 	ButtonGroup tempGroup = new ButtonGroup();
 	JRadioButton frozenRB = new JRadioButton("Frozen ", false),
@@ -118,6 +119,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	BigDecimal one = new BigDecimal("1");
 	BigDecimal three = new BigDecimal("3");
 	
+	Boolean editing = false;
+	
 	//Order Item Class
 	class OrderItem{
 		String CoffeeType;
@@ -137,7 +140,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			itemName = name;
 		}
 		
-		
 			
 		//returns the string format - item description and price
 		public String[] getRow() {
@@ -150,7 +152,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			
 			NumberFormat money = NumberFormat.getCurrencyInstance();
 			String price$ = money.format(price.doubleValue());
-			String row[] = {size + " " + temp +itemName, price$};
+			String row[] = {"  " + size + " " + temp +itemName, "   " + price$};
 			return row;
 		}
 		
@@ -169,7 +171,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		checkoutTable = new JTable(model);
 		sp = new JScrollPane(checkoutTable);
 		
-		Object[] columns = { "      Order Item" , "  Price" };
+		Object[] columns = { "       Order Item" , " Price" };
 		model.setColumnIdentifiers(columns);
 		
 		checkoutTable.setRowHeight(40);
@@ -178,13 +180,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		checkoutTable.setGridColor(Color.BLACK);// colors grid lines
 		
 		checkoutTable.getTableHeader().setFont(new Font("Arial",Font.PLAIN, 25));
-		checkoutTable.getColumnModel().getColumn(0).setPreferredWidth(220);
-		checkoutTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+		checkoutTable.getColumnModel().getColumn(0).setPreferredWidth(240);
+		checkoutTable.getColumnModel().getColumn(1).setPreferredWidth(80);
 		
 		//--------------------------------------------------
 		
 		
-		// fancy order total $$ label
+		// big order total $$ label
 		orderTotalLbl.setFont(new Font("Courier", Font.PLAIN, 40));
 		orderTotalLbl.setForeground(new Color(128, 64, 0));
 		orderTotalLbl.setBackground(Color.WHITE);
@@ -313,7 +315,51 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		//-----East Panel Buttons-----------
 		if(e.getSource() == editItem){
 			if(checkoutTable.getSelectedRow() > -1) {
+				editing = true;
+				//cartItems++;
+				
+				orderTotal = orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
+				orderTotalLbl.setText("$" + orderTotal);
+				
+				if(cart.get(checkoutTable.getSelectedRow()).CoffeeType == "plain"){
+					plainCoffeeFrame(cart.get(checkoutTable.getSelectedRow()).itemName, 4.00);
+				}else if(cart.get(checkoutTable.getSelectedRow()).CoffeeType == "special"){
+					specialCoffeeFrame(cart.get(checkoutTable.getSelectedRow()).itemName, 5.00);
+				}else if(cart.get(checkoutTable.getSelectedRow()).CoffeeType == "non"){
+					nonCoffeeFrame(cart.get(checkoutTable.getSelectedRow()).itemName, 3.00);
+				}
+				
+				orderPanel.removeAll();
+				orderPanel.add(doneEditing);
+				orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
+				
+				
+				
+				sizeGroup.clearSelection();
+				
+				if(cart.get(checkoutTable.getSelectedRow()).size == "Small"){
+					smallRB.setSelected(true);
+				}else if(cart.get(checkoutTable.getSelectedRow()).size == "Medium"){
+					mediumRB.setSelected(true);
+				}else if(cart.get(checkoutTable.getSelectedRow()).size == "Large"){
+					largeRB.setSelected(true);
+				}
+				
+				tempGroup.clearSelection();
+				
+				if(cart.get(checkoutTable.getSelectedRow()).temp == "Frozen "){
+					frozenRB.setSelected(true);
+				}else if(cart.get(checkoutTable.getSelectedRow()).temp == "Iced "){
+					icedRB.setSelected(true);
+				}else if(cart.get(checkoutTable.getSelectedRow()).temp == "Hot "){
+					hotRB.setSelected(true);
+				}
+				
+				
+				/*
 				OrderItem item = cart.get(checkoutTable.getSelectedRow());
+				//cartItems--;
+				
 				//Sets title name for later use
 				itemView.setUndecorated(true);
 				itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
@@ -324,11 +370,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				
 				orderPanel.add(doneEditing);
 				itemView.add(orderPanel, BorderLayout.SOUTH);
+				
 				//Coffee Name and Price
-				NumberFormat money = NumberFormat.getCurrencyInstance();
-				String price$ = money.format(item.price.doubleValue());
+				//NumberFormat money = NumberFormat.getCurrencyInstance();
+				//String price$ = money.format(item.price.doubleValue());
 				//------------
-				itemtotalLBL.setText("Item Total: "+ price$);
+				itemtotalLBL.setText("Item Total: ");
 				orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 				itemView.add(radioPanel, BorderLayout.CENTER);
 				
@@ -338,36 +385,82 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				sizePanel.add(mediumRB);
 				sizePanel.add(largeRB);
 				
+				
+				sizeGroup.clearSelection();
+				
+				if(item.size == "Small"){
+					smallRB.setSelected(true);
+				}else if(item.size == "Medium"){
+					mediumRB.setSelected(true);
+				}else if(item.size == "Large"){
+					largeRB.setSelected(true);
+				}	
+				
 				//adding temp radio buttons
+				tempGroup.add(frozenRB);
 				tempGroup.add(icedRB);
 				tempGroup.add(hotRB);
 				
 				//resetting selections
 				tempPanel.setLayout(new GridLayout(3,1));
+				tempPanel.add(frozenRB);
 				tempPanel.add(icedRB);
 				tempPanel.add(hotRB);
+				
+				tempGroup.clearSelection();
+				
+				if(item.temp == "Frozen "){
+					frozenRB.setSelected(true);
+				}else if(item.temp == "Iced "){
+					icedRB.setSelected(true);
+				}else if(item.temp == "Hot "){
+					hotRB.setSelected(true);
+				}
+				
 				
 				radioPanel.add(sizePanel);
 				radioPanel.add(tempPanel);
 				orderTotal = orderTotal.subtract(item.price);
 				orderTotalLbl.setText("$" + orderTotal);
+				
+				*/
 			}
 		}
 		
 		if(e.getSource() == doneEditing){
-			OrderItem item = cart.get(checkoutTable.getSelectedRow());
+			
+			cart.get(checkoutTable.getSelectedRow()).price = cart.get(cart.size()-1).price;
+			cart.get(checkoutTable.getSelectedRow()).size = cart.get(cart.size()-1).size;
+			cart.get(checkoutTable.getSelectedRow()).temp = cart.get(cart.size()-1).temp;
+			
+			//OrderItem item = cart.get(checkoutTable.getSelectedRow());
+			
+			//cartItems--;
 			//int row = checkoutTable.getSelectedRow();
 			//model.removeRow(checkoutTable.getSelectedRow());
 			//model.insertRow(row, item.getRow());
 			
-			orderTotal = orderTotal.add(item.price);
+			if(cart.get(checkoutTable.getSelectedRow()).size == "Small"){
+				orderTotal = orderTotal.add(cart.get(checkoutTable.getSelectedRow()).price);
+			}else if(cart.get(checkoutTable.getSelectedRow()).size == "Medium"){
+				orderTotal = orderTotal.add(cart.get(checkoutTable.getSelectedRow()).price.add(one));
+			}else if(cart.get(checkoutTable.getSelectedRow()).size == "Large"){
+				orderTotal = orderTotal.add(cart.get(checkoutTable.getSelectedRow()).price.add(three));
+			}
+			
 			orderTotalLbl.setText("$" + orderTotal);
+			
+			
+			model.insertRow(checkoutTable.getSelectedRow(), cart.get(checkoutTable.getSelectedRow()).getRow());
+			model.removeRow(checkoutTable.getSelectedRow()+1);
 			
 			orderPanel.removeAll();
 			radioPanel.removeAll();
 			sizePanel.removeAll();
 			tempPanel.removeAll();
 			itemView.dispose();
+			editing = false;
+			cart.remove(cart.size()-1);
 		}
 		
 		if(e.getSource() == removeItem){
@@ -412,7 +505,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			specialCoffeeFrame("Vanilla Latte", 5.00);
 		}
 		if(e.getSource() == decafButton){
-			plainCoffeeFrame("Decaf Coffee", 5.00);
+			specialCoffeeFrame("Decaf Coffee", 5.00);
 		}
 		if(e.getSource() == espressoButton){
 			nonCoffeeFrame("Espresso", 3.00);
@@ -565,6 +658,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		OrderItem item = new OrderItem();
 		cart.add(item);
 		
+		item.CoffeeType = "non";
 		item.itemName = itemName;
 		itemView.setUndecorated(true);
 		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
@@ -639,32 +733,57 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		NumberFormat money = NumberFormat.getCurrencyInstance();
 		String price$;
 		
-		if(e.getSource() == smallRB){
-			cart.get(cartItems).size = "Small";
-			price$ = money.format(cart.get(cartItems).price.doubleValue());
-			itemtotalLBL.setText("Item Total: "+  price$);
-		} else if(e.getSource() == mediumRB){
-			cart.get(cartItems).size = "Medium";
-			price$ = money.format(cart.get(cartItems).price.add(one).doubleValue());
-			itemtotalLBL.setText("Item Total: "+  price$);
-		} else if(e.getSource() == largeRB){
-			cart.get(cartItems).size = "Large";
-			price$ = money.format(cart.get(cartItems).price.add(three).doubleValue());
-			itemtotalLBL.setText("Item Total: "+  price$);
-		}
+		/*
+		if(editing){
+			if(e.getSource() == smallRB){
+				cart.get(checkoutTable.getSelectedRow()).size = "Small";
+				price$ = money.format(cart.get(checkoutTable.getSelectedRow()).price.doubleValue());
+				itemtotalLBL.setText("Item Total: "+  price$);
+			} else if(e.getSource() == mediumRB){
+				cart.get(checkoutTable.getSelectedRow()).size = "Medium";
+				price$ = money.format(cart.get(checkoutTable.getSelectedRow()).price.add(one).doubleValue());
+				itemtotalLBL.setText("Item Total: "+  price$);
+			} else if(e.getSource() == largeRB){
+				cart.get(checkoutTable.getSelectedRow()).size = "Large";
+				price$ = money.format(cart.get(checkoutTable.getSelectedRow()).price.add(three).doubleValue());
+				itemtotalLBL.setText("Item Total: "+  price$);
+			}
+			
+			if(e.getSource() == frozenRB){
+				cart.get(checkoutTable.getSelectedRow()).temp = "Frozen ";
+			} else if(e.getSource() == icedRB){
+				cart.get(checkoutTable.getSelectedRow()).temp = "Iced ";
+			} else if(e.getSource() == hotRB){
+				cart.get(checkoutTable.getSelectedRow()).temp = "Hot ";
+			}
+			
+		}else if(!editing){
+			
+			*/
 		
-		if(e.getSource() == frozenRB){
-			cart.get(cartItems).temp = "Frozen ";
-		} else if(e.getSource() == icedRB){
-			cart.get(cartItems).temp = "Iced ";
-		} else if(e.getSource() == hotRB){
-			cart.get(cartItems).temp = "Hot ";
+			if(e.getSource() == smallRB){
+				cart.get(cart.size() - 1).size = "Small";
+				price$ = money.format(cart.get(cart.size() - 1).price.doubleValue());
+				itemtotalLBL.setText("Item Total: "+  price$);
+			} else if(e.getSource() == mediumRB){
+				cart.get(cart.size() - 1).size = "Medium";
+				price$ = money.format(cart.get(cart.size() - 1).price.add(one).doubleValue());
+				itemtotalLBL.setText("Item Total: "+  price$);
+			} else if(e.getSource() == largeRB){
+				cart.get(cart.size() - 1).size = "Large";
+				price$ = money.format(cart.get(cart.size() - 1).price.add(three).doubleValue());
+				itemtotalLBL.setText("Item Total: "+  price$);
+			}
+			
+			if(e.getSource() == frozenRB){
+				cart.get(cart.size() - 1).temp = "Frozen ";
+			} else if(e.getSource() == icedRB){
+				cart.get(cart.size() - 1).temp = "Iced ";
+			} else if(e.getSource() == hotRB){
+				cart.get(cart.size() - 1).temp = "Hot ";
+			
 		}
+
 	}
-
-
-
-
-
 	
 }
