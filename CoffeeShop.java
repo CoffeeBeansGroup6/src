@@ -52,6 +52,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JFrame itemView = new JFrame();
 	JFrame checkoutView = new JFrame();
 	JLabel itemtotalLBL = new JLabel();
+	JLabel itemNameLbl = new JLabel();
 	JPanel radioPanel = new JPanel();
 	JPanel sizePanel = new JPanel();
 	JPanel tempPanel = new JPanel();
@@ -115,11 +116,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JButton doneEditing = new JButton("Done");
 	
 	int cartItems = 0;
+	int numOrderItems = 0;
 	BigDecimal orderTotal = new BigDecimal("0.00");
 	BigDecimal one = new BigDecimal("1");
 	BigDecimal three = new BigDecimal("3");
 	
 	Boolean editing = false;
+
+	
+	
 	
 	//Order Item Class
 	class OrderItem{
@@ -171,7 +176,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		checkoutTable = new JTable(model);
 		sp = new JScrollPane(checkoutTable);
 		
-		Object[] columns = { "       Order Item" , " Price" };
+		Object[] columns = { "    Order Items (" + numOrderItems +")" , " Price" };
 		model.setColumnIdentifiers(columns);
 		
 		checkoutTable.setRowHeight(40);
@@ -302,7 +307,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		if(e.getSource() == addItem){
 			//adds item from cart to the table
 			//clears pop up frame
-			
 			model.insertRow(cartItems, cart.get(cartItems).getRow());
 			
 			orderTotal = orderTotal.add(cart.get(cartItems).price);
@@ -314,6 +318,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			sizePanel.removeAll();
 			tempPanel.removeAll();
 			itemView.dispose();
+			
+			//updates number of items displayed in header
+			numOrderItems++;
+			Object[] columns = { "    Order Items (" + numOrderItems +")" , " Price" };
+			model.setColumnIdentifiers(columns);
+			checkoutTable.getColumnModel().getColumn(0).setPreferredWidth(240);
+			checkoutTable.getColumnModel().getColumn(1).setPreferredWidth(80);
 		}
 		
 		//-----East Panel Buttons-----------
@@ -414,6 +425,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				cart.remove(checkoutTable.getSelectedRow());
 				model.removeRow(checkoutTable.getSelectedRow());
 				cartItems--;
+				
+				//updates number of items displayed in header
+				numOrderItems--;
+				Object[] columns = { "    Order Items (" + numOrderItems +")" , " Price" };
+				model.setColumnIdentifiers(columns);
+				checkoutTable.getColumnModel().getColumn(0).setPreferredWidth(240);
+				checkoutTable.getColumnModel().getColumn(1).setPreferredWidth(80);
 			}
 		}
 		
@@ -504,6 +522,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		item.CoffeeType = "plain";
 		item.itemName = itemName;
+		
 		itemView.setUndecorated(true);
 		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
 		itemView.setSize(300, 300);
@@ -514,8 +533,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		orderPanel.add(cancelItem);
 		orderPanel.add(addItem);
 		itemView.add(orderPanel, BorderLayout.SOUTH);
+
+		//adds item name to pop up
+		itemNameLbl.setText(item.itemName);
+		itemView.add(itemNameLbl, BorderLayout.NORTH);
 		
-		//Coffee Name and Price
+		//Coffee Price
 		item.price = new BigDecimal(price);
 
 		itemtotalLBL.setText("Item Total: ");
@@ -567,7 +590,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		orderPanel.add(addItem);
 		itemView.add(orderPanel, BorderLayout.SOUTH);
 		
-		//Coffee Name and Price
+		//adds item name to pop up
+		itemNameLbl.setText(item.itemName);
+		itemView.add(itemNameLbl, BorderLayout.NORTH);
+		
+		//Coffee Price
 		item.price = new BigDecimal(price);
 
 		//------------
@@ -619,7 +646,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		orderPanel.add(addItem);
 		itemView.add(orderPanel, BorderLayout.SOUTH);
 		
-		//Coffee Name and Price
+		//adds item name to pop up
+		itemNameLbl.setText(item.itemName);
+		itemView.add(itemNameLbl, BorderLayout.NORTH);
+		
+		//Coffee Price
 		item.price = new BigDecimal(price);
 
 		itemtotalLBL.setText("Item Total: ");
