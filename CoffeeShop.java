@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
@@ -494,6 +495,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
+			
+			//generateReceipt();
 			checkoutView.setSize(400, 400);
 			checkoutView.setTitle("Checkout");
 			checkoutView.setVisible(true);
@@ -754,6 +757,10 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	// custom JPanel for on screen receipt
 	class ReceiptPanel extends JPanel implements Printable {
 		
+		public Dimension getPreferredSize() {
+			return new Dimension(400, 400);
+		}
+
 		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
 
@@ -764,13 +771,28 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 			g2d.setRenderingHints(hints);
 			
+			Calendar cal = new GregorianCalendar();
+			
+			g2d.setColor(Color.BLACK);
+			g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+			g2d.drawString("Java Beans", 66, 20);
+			g2d.drawString((cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/"
+					+ cal.get(Calendar.YEAR) + "  " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE)
+					+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 30);
+			
+			JLabel[] OrderOutput = new JLabel[cart.size()];
+			for (int i = 0; i < cart.size(); i++) {
+				OrderOutput[i] = new JLabel("" + (i + 1) + ". " +(cart.get(i)));
+				//OrderOutput[i].setFont(f);
+				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
+				add(OrderOutput[i]);
+			}
+			NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+			g2d.drawString("Total: " + nf.format(orderTotal), 74, getHeight() - 55);
+
+			
 			
 
-		
-		
-		
-		
-		
 		
 		
 		}
