@@ -477,10 +477,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//Coffee Name and Price
 		item.price = new BigDecimal(price);
-		NumberFormat money = NumberFormat.getCurrencyInstance();
-		String price$ = money.format(item.price.doubleValue());
-		//------------
-		itemtotalLBL.setText("Item Total: "+ price$);
+
+		itemtotalLBL.setText("Item Total: ");
 		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 		itemView.add(radioPanel, BorderLayout.CENTER);
 		
@@ -530,10 +528,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//Coffee Name and Price
 		item.price = new BigDecimal(price);
-		NumberFormat money = NumberFormat.getCurrencyInstance();
-		String price$ = money.format(item.price.doubleValue());
+
 		//------------
-		itemtotalLBL.setText("Item Total: "+ price$);
+		itemtotalLBL.setText("Item Total: ");
 		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 		itemView.add(radioPanel, BorderLayout.CENTER);
 		
@@ -582,10 +579,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//Coffee Name and Price
 		item.price = new BigDecimal(price);
-		NumberFormat money = NumberFormat.getCurrencyInstance();
-		String price$ = money.format(item.price.doubleValue());
-		//------------
-		itemtotalLBL.setText("Item Total: "+ price$);
+
+		itemtotalLBL.setText("Item Total: ");
 		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 		itemView.add(radioPanel, BorderLayout.CENTER);
 		
@@ -596,9 +591,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		sizeGroup.clearSelection();
 		smallRB.setSelected(true);
-		
-		//adding temp radio buttons
-		
 		
 		tempPanel.setLayout(new GridLayout(3,1));
 		
@@ -644,12 +636,21 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
+		NumberFormat money = NumberFormat.getCurrencyInstance();
+		String price$;
+		
 		if(e.getSource() == smallRB){
 			cart.get(cartItems).size = "Small";
+			price$ = money.format(cart.get(cartItems).price.doubleValue());
+			itemtotalLBL.setText("Item Total: "+  price$);
 		} else if(e.getSource() == mediumRB){
 			cart.get(cartItems).size = "Medium";
+			price$ = money.format(cart.get(cartItems).price.add(one).doubleValue());
+			itemtotalLBL.setText("Item Total: "+  price$);
 		} else if(e.getSource() == largeRB){
 			cart.get(cartItems).size = "Large";
+			price$ = money.format(cart.get(cartItems).price.add(three).doubleValue());
+			itemtotalLBL.setText("Item Total: "+  price$);
 		}
 		
 		if(e.getSource() == frozenRB){
