@@ -12,6 +12,7 @@ import java.awt.event.ItemListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -690,9 +691,25 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	
 	
 	public void generateReceipt() {
+		//generate receipt
 		ReceiptPanel ReceiptPanel = new ReceiptPanel();
-		JFrame printscreen = new JFrame();
+		JFrame printFrame = new JFrame();
+		printFrame.setSize(new Dimension(400, 400+ 16* cart.size()));
+		printFrame.add(ReceiptPanel);
+		printFrame.setTitle("Coffee Shop Receipt");
+		printFrame.setVisible(true);
 		
+		//submit print job
+		PrinterJob printjob = PrinterJob.getPrinterJob();
+		printjob.setPrintable(ReceiptPanel);
+		if (printjob.printDialog()) {
+			try {
+				printjob.print();
+			} catch(PrinterException x_x) {
+				System.out.println("Error printing:" + x_x);
+			}
+			
+		}
 		
 	}
 	
