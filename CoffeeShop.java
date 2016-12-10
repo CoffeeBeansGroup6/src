@@ -1,3 +1,4 @@
+import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,6 +18,8 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -132,7 +135,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	Boolean editing = false;
 	
 	//sounds for adding and removing
-	AudioClip addedSound, removedSound;
+	AudioClip addSound, removeSound;
 	
 	//Order Item Class
 	class OrderItem{
@@ -172,7 +175,17 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	}
 
 	public CoffeeShop() {
-		
+		URL addURL, removeURL;
+		try {
+			addURL = new URL("file:add.wav");
+			addSound = Applet.newAudioClip(addURL);
+
+			removeURL = new URL("file:remove.wav");
+			removeSound = Applet.newAudioClip(removeURL);
+
+		} catch (MalformedURLException frack) {
+			frack.printStackTrace();
+		}
 		// Table Settings
 		//--------------------------------------------------
 		model = new DefaultTableModel(0, 2) {
@@ -316,6 +329,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			//ReEnables main JFrame
 			this.setEnabled(true);
 			
+			//Plays Add sound
+			addSound.play();
+			
 			//adds item from cart to the table
 			//clears pop up frame
 			model.insertRow(cartItems, cart.get(cartItems).getRow());
@@ -442,6 +458,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		//takes an item out of table and cart
 		if(e.getSource() == removeItem){
 			if(checkoutTable.getSelectedRow() > -1) {
+				//Plays remove sound
+				removeSound.play();
+				
 				orderTotal = orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
 				orderTotalLbl.setText("$" + orderTotal);
 
