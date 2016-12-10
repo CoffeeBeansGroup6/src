@@ -54,7 +54,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 
-	//Declaration of many objects, variables
+	// Declaration of many objects, variables
 	JPanel eastPanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
 	JPanel mainPanel = new JPanel();
@@ -93,10 +93,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JLabel cashDue = new JLabel();
 	String cashGiven;
 	BigDecimal cashGivenBD = new BigDecimal("0.00");
-
+	
+	
 	JButton checkoutButton = new JButton("Check Out");
-	JButton editItem = new JButton("Edit Selected Item");
-	JButton removeItem = new JButton("Remove Selected Item");
+	JButton editItem = new JButton("Edit Selected");
+	JButton removeItem = new JButton("Remove Selected");
 
 	// Radio Buttons
 	ButtonGroup sizeGroup = new ButtonGroup();
@@ -118,25 +119,26 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 	ReceiptPanel ReceiptPanel = new ReceiptPanel();
 
+	// URL = CoffeeShop.class.getResource("/add.wav");
 	// Coffee Button Images
-	ImageIcon darkIcon = new ImageIcon(
-			new ImageIcon("dark.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+	ImageIcon darkIcon = new ImageIcon(new ImageIcon(CoffeeShop.class.getResource("/dark.jpg")).getImage()
+			.getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon mediumIcon = new ImageIcon(
-			new ImageIcon("medium.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/medium.jpg")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon blondeIcon = new ImageIcon(
-			new ImageIcon("blonde.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/blonde.jpg")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon mochaIcon = new ImageIcon(
-			new ImageIcon("Mocha.jpeg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/Mocha.jpeg")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon vanillaIcon = new ImageIcon(
-			new ImageIcon("Vanilla.png").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/Vanilla.png")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon decafIcon = new ImageIcon(
-			new ImageIcon("decaf.png").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/decaf.png")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon espressoIcon = new ImageIcon(
-			new ImageIcon("espresso.png").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/espresso.png")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon cocoIcon = new ImageIcon(
-			new ImageIcon("hotCoco.jpg").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/hotCoco.jpg")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 	ImageIcon teaIcon = new ImageIcon(
-			new ImageIcon("Tea.png").getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
+			new ImageIcon(CoffeeShop.class.getResource("/Tea.png")).getImage().getScaledInstance(225, 225, Image.SCALE_SMOOTH));
 
 	// Coffee Buttons
 	// -----------------------------------
@@ -205,7 +207,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		public OrderItem(String name) {
 			itemName = name;
 		}
-		
+
 		// returns the string array - item description and price
 		public String[] getRow() {
 
@@ -225,17 +227,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 	public CoffeeShop() {
 		URL addURL, removeURL;
-		try {
-			addURL = new URL("file:add.wav");
-			addSound = Applet.newAudioClip(addURL);
 
-			removeURL = new URL("file:remove.wav");
-			removeSound = Applet.newAudioClip(removeURL);
+		addURL = CoffeeShop.class.getResource("/add.wav");
+		addSound = Applet.newAudioClip(addURL);
 
-		} catch (MalformedURLException frack) {
-			frack.printStackTrace();
-		}
-		
+		removeURL = CoffeeShop.class.getResource("/remove.wav");
+		removeSound = Applet.newAudioClip(removeURL);
+
 		// Table Settings
 		// --------------------------------------------------
 		model = new DefaultTableModel(0, 2) {
@@ -624,8 +622,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			}
 		}
 
-		//generates a receipt for printing
-		//resets app to begin another checkout
+		// generates a receipt for printing
+		// resets app to begin another checkout
 		if (e.getSource() == PrintReceipt) {
 
 			CashPanel.removeAll();
@@ -655,10 +653,10 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			payCheck = false;
 		}
 
-		//checks your checkout code
-		//"manager" allows price override
-		//"employee" gets half off
-		//"coupon" subtracts $2.00!
+		// checks your checkout code
+		// "manager" allows price override
+		// "employee" gets half off
+		// "coupon" subtracts $2.00!
 		if (e.getSource() == validate) {
 			if (checkoutCodes.getText().equals("manager")) {
 				orderTotal = new BigDecimal(JOptionPane.showInputDialog(null, "Insert new price. (ex: 10.00)",
@@ -678,7 +676,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			checkoutView.repaint();
 		}
 
-		//carries out cash payment
+		// carries out cash payment
 		if (e.getSource() == CashB) {
 			payCash = true;
 			CashFrame.setUndecorated(true);
@@ -706,8 +704,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			cashDue.setText("Change Due: $" + cashGivenBD);
 			CashFrame.repaint();
 		}
-		
-		//carries out credit payment
+
+		// carries out credit payment
 		if (e.getSource() == CreditDebitB) {
 			payCard = true;
 			CreditDebitFrame.setUndecorated(true);
@@ -731,8 +729,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			CreditDebitLabel.setText(checkoutTotalLabel.getText() + ". The amount was charged to your account.");
 			CreditDebitFrame.repaint();
 		}
-		
-		//carries out check payment
+
+		// carries out check payment
 		if (e.getSource() == CheckB) {
 			payCheck = true;
 			CheckFrame.setUndecorated(true);
@@ -757,7 +755,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			CheckFrame.repaint();
 		}
 
-		//cancels checkout menu
+		// cancels checkout menu
 		if (e.getSource() == cancelCheckout) {
 			// ReEnables main JFrame
 			this.setEnabled(true);
@@ -1010,7 +1008,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				System.out.println("Error printing:" + x_x);
 			}
 		}
-
 	}
 
 	// custom JPanel for on screen receipt
@@ -1054,7 +1051,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				NumberFormat money = NumberFormat.getCurrencyInstance();
 				String price$ = money.format(cart.get(i).price.doubleValue());
 				OrderOutput[i] = new JLabel("" + (i + 1) + ". " + cart.get(i).itemName + "  " + price$);
-				
+
 				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
 				add(OrderOutput[i]);
 			}
