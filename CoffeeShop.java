@@ -569,6 +569,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			CashB.addActionListener(this);
 			CreditDebitB.addActionListener(this);
 			CheckB.addActionListener(this);
+			PrintReceipt.addActionListener(this);
 			PrintReceipt = new JButton("Print Receipt");
 			PrintReceipt.addActionListener(this);
 			paymentRB.add(CashB);
