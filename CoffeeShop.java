@@ -74,6 +74,14 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JPanel radioPanel = new JPanel();
 	JPanel sizePanel = new JPanel();
 	JPanel tempPanel = new JPanel();
+	
+	//Checkout Panels
+	JFrame CashFrame = new JFrame();
+	JFrame CheckFrame = new JFrame();
+	JFrame CreditDebitFrame = new JFrame();
+	JPanel CashPanel = new JPanel();
+	JPanel CheckPanel = new JPanel();
+	JPanel CreditDebitPanel = new JPanel();
 
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
@@ -593,8 +601,35 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out",
 						"Attention", 0);
 			}
+		}
+		if(e.getSource()==CashB){
 			
+			CashFrame.setSize(400, 400);
+			CashFrame.setTitle("Cash");
+			CashFrame.setVisible(true);
 			
+			CashPanel.add(cancelCheckout);
+			CashFrame.add(CashPanel, BorderLayout.SOUTH);
+			
+		}
+		if(e.getSource()==CreditDebitB){
+			
+			CreditDebitFrame.setSize(400, 400);
+			CreditDebitFrame.setTitle("Credit/Debit");
+			CreditDebitFrame.setVisible(true);
+			
+			CreditDebitPanel.add(cancelCheckout);
+			CreditDebitFrame.add(CreditDebitPanel, BorderLayout.SOUTH);
+			
+		}
+		if(e.getSource()==CheckB){
+			
+			CheckFrame.setSize(400, 400);
+			CheckFrame.setTitle("Check");
+			CheckFrame.setVisible(true);
+			
+			CheckPanel.add(cancelCheckout);
+			CheckFrame.add(CheckPanel, BorderLayout.SOUTH);
 			
 		}
 		
