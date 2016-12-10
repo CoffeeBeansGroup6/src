@@ -81,9 +81,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 	
 	ButtonGroup paymentRB = new ButtonGroup();
-	JRadioButton CashRB, CreditDebitRB, CheckRB;
+	//JRadioButton CashRB, CreditDebitRB, CheckRB;
+	
+	JButton CashB = new JButton("Cash");
+	JButton CreditDebitB = new JButton ("Credit or Debit");
+	JButton CheckB = new JButton("Check");
 	
 	JButton PrintReceipt = new JButton("Print Receipt");
+	ReceiptPanel ReceiptPanel = new ReceiptPanel();
+
 	
 	
 	//Coffee Button Images
@@ -496,7 +502,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
 			
-			//generateReceipt();
+			generateReceipt();
+			
 			checkoutView.setSize(400, 400);
 			checkoutView.setTitle("Checkout");
 			checkoutView.setVisible(true);
@@ -508,7 +515,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			JPanel radioPanelPanel = new JPanel();
 			
 			//Adding Radio Buttons for checkout
-			CashRB = new JRadioButton("Cash", true);
+			/*CashRB = new JRadioButton("Cash", true);
 			CashRB.addItemListener(this);
 			CreditDebitRB = new JRadioButton("Credit or Debit Card", false);
 			CreditDebitRB.addItemListener(this);
@@ -522,23 +529,46 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 			radiocheckoutPanel.add(CashRB);
 			radiocheckoutPanel.add(CreditDebitRB);
-			radiocheckoutPanel.add(CheckRB);
+			radiocheckoutPanel.add(CheckRB);*/
+			
+			CashB.addActionListener(this);
+			CreditDebitB.addActionListener(this);
+			CheckB.addActionListener(this);
+			PrintReceipt = new JButton("Print Receipt");
+			paymentRB.add(CashB);
+			paymentRB.add(CreditDebitB);
+			paymentRB.add(CheckB);
+			paymentRB.add(PrintReceipt);
+			
+			radioPanelPanel.add(radiocheckoutPanel, new GridLayout(1,4));
+			radiocheckoutPanel.add(CashB);
+			radiocheckoutPanel.add(CreditDebitB);
+			radiocheckoutPanel.add(CheckB);
 			radiocheckoutPanel.add(PrintReceipt);
-			radioPanelPanel.add(radiocheckoutPanel, new GridLayout(3,1));
 			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
 		}
-		if(e.getSource() == PrintReceipt){
-			if (cart.size() > 0) {
-				generateReceipt();
-				
-			} else {
-				JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out",
-						"Attention", 0);
-
-			}
-		}
 		
+		/*Object source = e.getSource();
+        if (source instanceof JButton) {
+            JButton PrintReceipt = (JButton)source;
+            generateReceipt();
+           /* if(e.getSource() == PrintReceipt){
+    			/*if (cart.size() > 0) {
+    				generateReceipt();*/
+    				
+    			//} else {
+    				//JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out",
+    						//"Attention", 0);
+
+    			//}
+    		//}
+            
+       // }
+		
+	//}
 	}
+
+
 	
 	//Creates Plain Coffee Pop Up Frame
 	public void plainCoffeeFrame(String itemName, double price){
@@ -729,7 +759,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	
 	
 	public void generateReceipt() {
-		ReceiptPanel ReceiptPanel = new ReceiptPanel();
+		//generate receipt
+		
 		JFrame printscreen = new JFrame();
 		
 		printscreen.setSize(new Dimension(260, 320 + 16*cart.size()));
@@ -746,13 +777,34 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				System.out.println("Error printing: " + x_x);
 			}
 		}
+	}
 		
+		
+	
+	
+	public void checkout() {
+
+		JFrame printFrame = new JFrame();
+		printFrame.setSize(new Dimension(400, 400+ 16* cart.size()));
+		printFrame.add(ReceiptPanel);
+		printFrame.setTitle("Coffee Shop Receipt");
+		printFrame.setVisible(true);
+		
+		//submit print job
+		PrinterJob printjob = PrinterJob.getPrinterJob();
+		printjob.setPrintable(ReceiptPanel);
+		if (printjob.printDialog()) {
+			try {
+				printjob.print();
+			} catch(PrinterException x_x) {
+				System.out.println("Error printing:" + x_x);
+			}
+			
+		}
+
 		
 	}
 	
-	public void checkout() {
-		
-	}
 	
 	// custom JPanel for on screen receipt
 	class ReceiptPanel extends JPanel implements Printable {
