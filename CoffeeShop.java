@@ -417,6 +417,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 			if (checkoutTable.getSelectedRow() > -1) {
 				editing = true;
+				
+				//Hot Chocolate doesnt get temp settings
+				if(cart.get(checkoutTable.getSelectedRow()).itemName == "Hot Chocolate"){
+					tempGroup.clearSelection();
+					cart.get(checkoutTable.getSelectedRow()).temp = "";
+				}
 
 				// take item price off of total
 				orderTotal = orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
@@ -462,6 +468,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				} else if (cart.get(checkoutTable.getSelectedRow()).temp == "Hot ") {
 					hotRB.setSelected(true);
 				}
+
 
 			}
 		}
