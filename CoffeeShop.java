@@ -1,12 +1,19 @@
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+
 import java.awt.RenderingHints;
+
+import java.awt.Toolkit;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -16,6 +23,8 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +63,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JPanel row2 = new JPanel();
 	JPanel row3 = new JPanel();
 	
+	JPanel titlePanel = new JPanel();
 	JPanel orderPanel = new JPanel();
+	JPanel orderSettingsPanel = new JPanel();
 	JPanel checkoutPanel = new JPanel();
 	JFrame itemView = new JFrame();
 	JFrame checkoutView = new JFrame();
@@ -118,6 +129,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	//-----------------------------------
 	
 	JLabel orderTotalLbl = new JLabel("$0.00");
+	JLabel itemSizeLbl = new JLabel("Size:");
+	JLabel itemTempLbl = new JLabel("Temperature:");
 	
 	DefaultTableModel model;
 	JTable checkoutTable;
@@ -137,9 +150,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	BigDecimal three = new BigDecimal("3");
 	
 	Boolean editing = false;
-
 	
-	
+	//sounds for adding and removing
+	AudioClip addSound, removeSound;
 	
 	//Order Item Class
 	class OrderItem{
@@ -179,7 +192,17 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	}
 
 	public CoffeeShop() {
-		
+		URL addURL, removeURL;
+		try {
+			addURL = new URL("file:add.wav");
+			addSound = Applet.newAudioClip(addURL);
+
+			removeURL = new URL("file:remove.wav");
+			removeSound = Applet.newAudioClip(removeURL);
+
+		} catch (MalformedURLException frack) {
+			frack.printStackTrace();
+		}
 		// Table Settings
 		//--------------------------------------------------
 		model = new DefaultTableModel(0, 2) {
@@ -323,6 +346,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if(e.getSource() == addItem){
+			//ReEnables main JFrame
+			this.setEnabled(true);
+			
+			//Plays Add sound
+			addSound.play();
+			
 			//adds item from cart to the table
 			//clears pop up frame
 			model.insertRow(cartItems, cart.get(cartItems).getRow());
@@ -332,6 +361,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			
 			cartItems++;
 			orderPanel.removeAll();
+			orderSettingsPanel.removeAll();
 			radioPanel.removeAll();
 			sizePanel.removeAll();
 			tempPanel.removeAll();
@@ -347,6 +377,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//-----East Panel Buttons-----------
 		if(e.getSource() == editItem){
+			//Disables main JFrame
+			this.setEnabled(false);
 			//edits selected item
 			//brings up pop up window for changes
 			//creates a temporary Edit Item
@@ -367,10 +399,16 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 					nonCoffeeFrame(cart.get(checkoutTable.getSelectedRow()).itemName, 3.00);
 				}
 				
+				radioPanel.setPreferredSize(new Dimension(300,110));
+				orderSettingsPanel.add(radioPanel, BorderLayout.CENTER);
+				orderSettingsPanel.add(itemtotalLBL);
+				
+				itemView.add(orderSettingsPanel);
+				itemView.add(orderPanel, BorderLayout.SOUTH);
+
 				//alters pop up to have done button rather than add and cancel
 				orderPanel.removeAll();
 				orderPanel.add(doneEditing);
-				orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
 				
 				//set RadioButtons the item's values
 				sizeGroup.clearSelection();
@@ -397,6 +435,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		}
 		
 		if(e.getSource() == doneEditing){
+			//ReEnables main JFrame
+			this.setEnabled(true);
+			
+			//Plays add sound
+			addSound.play();
 			//closes editing dialogue
 			//updates table and total price label
 			
@@ -423,6 +466,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			
 			//clears the pop up frame
 			orderPanel.removeAll();
+			orderSettingsPanel.removeAll();
 			radioPanel.removeAll();
 			sizePanel.removeAll();
 			tempPanel.removeAll();
@@ -436,6 +480,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		//takes an item out of table and cart
 		if(e.getSource() == removeItem){
 			if(checkoutTable.getSelectedRow() > -1) {
+				//Plays remove sound
+				removeSound.play();
 				
 				orderTotal = orderTotal.subtract(cart.get(checkoutTable.getSelectedRow()).price);
 				orderTotalLbl.setText("$" + orderTotal);
@@ -455,12 +501,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//Cancel order item - removes item from cart and closes window
 		if(e.getSource() == cancelItem){
+			//ReEnables main JFrame
+			this.setEnabled(true);
 			
 			if(cartItems > -1){
 				cart.remove(cart.size()-1);
 			}
 
 			orderPanel.removeAll();
+			orderSettingsPanel.removeAll();
 			radioPanel.removeAll();
 			sizePanel.removeAll();
 			tempPanel.removeAll();
@@ -487,7 +536,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			specialCoffeeFrame("Vanilla Latte", 5.00);
 		}
 		if(e.getSource() == decafButton){
-			specialCoffeeFrame("Decaf Coffee", 5.00);
+			plainCoffeeFrame("Decaf Coffee", 4.00);
 		}
 		if(e.getSource() == espressoButton){
 			nonCoffeeFrame("Espresso", 3.00);
@@ -501,8 +550,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
+
 			
 			generateReceipt();
+
+			//Disables main JFrame
+			//this.setEnabled(false);
+
 			
 			checkoutView.setSize(400, 400);
 			checkoutView.setTitle("Checkout");
@@ -547,6 +601,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			radiocheckoutPanel.add(PrintReceipt);
 			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
 		}
+
 		
 		/*Object source = e.getSource();
         if (source instanceof JButton) {
@@ -566,14 +621,16 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
        // }
 		
 	//}
+
 	}
 
 
 	
 	//Creates Plain Coffee Pop Up Frame
 	public void plainCoffeeFrame(String itemName, double price){
+		//Disables main JFrame
+		this.setEnabled(false);
 		//Sets title name for later use
-		
 		OrderItem item = new OrderItem();
 		cart.add(item);
 		
@@ -582,28 +639,36 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		itemView.setUndecorated(true);
 		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
-		itemView.setSize(300, 300);
+		itemView.setSize(300, 225);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
 		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
+		//Coffee Price
+		item.price = new BigDecimal(price);
+
+		itemtotalLBL.setFont(new Font("Arial", Font.ITALIC, 20));
+		itemtotalLBL.setText("Item Total: ");
+		radioPanel.setPreferredSize(new Dimension(300,110));
+		orderSettingsPanel.add(radioPanel, BorderLayout.CENTER);
+		orderSettingsPanel.add(itemtotalLBL);
+		
+		itemView.add(orderSettingsPanel);
 		orderPanel.add(cancelItem);
 		orderPanel.add(addItem);
 		itemView.add(orderPanel, BorderLayout.SOUTH);
 
 		//adds item name to pop up
-		itemNameLbl.setText(item.itemName);
-		itemView.add(itemNameLbl, BorderLayout.NORTH);
+		itemNameLbl.setFont(new Font("Arial", Font.BOLD, 15));
+		itemNameLbl.setText(item.itemName + "  ($4.00)");
+		titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		titlePanel.add(itemNameLbl);
+		itemView.add(titlePanel, BorderLayout.NORTH);
 		
-		//Coffee Price
-		item.price = new BigDecimal(price);
-
-		itemtotalLBL.setText("Item Total: ");
-		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-		itemView.add(radioPanel, BorderLayout.CENTER);
 		
 		//adding size radio buttons
-		sizePanel.setLayout(new GridLayout(3,1));
+		sizePanel.setLayout(new GridLayout(4,1));
+		sizePanel.add(itemSizeLbl);
 		sizePanel.add(smallRB);
 		sizePanel.add(mediumRB);
 		sizePanel.add(largeRB);
@@ -620,7 +685,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		tempGroup.clearSelection();
 		hotRB.setSelected(true);
 		
-		tempPanel.setLayout(new GridLayout(3,1));
+		tempPanel.setLayout(new GridLayout(4,1));
+		tempPanel.add(itemTempLbl);
 		tempPanel.add(icedRB);
 		tempPanel.add(hotRB);
 		
@@ -642,6 +708,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	
 	//Creates Specialty Coffee Pop Up Frame
 	public void specialCoffeeFrame(String itemName, double price){
+		//Disables main JFrame
+		this.setEnabled(false);
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
 		cart.add(item);
@@ -650,28 +718,35 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		item.itemName = itemName;
 		itemView.setUndecorated(true);
 		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
-		itemView.setSize(300, 300);
+		itemView.setSize(300, 225);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
-		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
-		orderPanel.add(cancelItem);
-		orderPanel.add(addItem);
-		itemView.add(orderPanel, BorderLayout.SOUTH);
+		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 		
 		//adds item name to pop up
-		itemNameLbl.setText(item.itemName);
-		itemView.add(itemNameLbl, BorderLayout.NORTH);
+		itemNameLbl.setFont(new Font("Arial", Font.BOLD, 15));
+		itemNameLbl.setText(item.itemName + "  ($5.00)");
+		titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		titlePanel.add(itemNameLbl);
+		itemView.add(titlePanel, BorderLayout.NORTH);
 		
 		//Coffee Price
 		item.price = new BigDecimal(price);
 
 		//------------
+		itemtotalLBL.setFont(new Font("Arial", Font.ITALIC, 20));
 		itemtotalLBL.setText("Item Total: ");
-		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-		itemView.add(radioPanel, BorderLayout.CENTER);
+		radioPanel.setPreferredSize(new Dimension(300,110));
+		orderSettingsPanel.add(radioPanel, BorderLayout.CENTER);
+		orderSettingsPanel.add(itemtotalLBL);
 		
-		sizePanel.setLayout(new GridLayout(3,1));
+		itemView.add(orderSettingsPanel);
+		orderPanel.add(cancelItem);
+		orderPanel.add(addItem);
+		itemView.add(orderPanel, BorderLayout.SOUTH);
+
+		sizePanel.setLayout(new GridLayout(4,1));
+		sizePanel.add(itemSizeLbl);
 		sizePanel.add(smallRB);
 		sizePanel.add(mediumRB);
 		sizePanel.add(largeRB);
@@ -687,7 +762,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		tempGroup.clearSelection();
 		hotRB.setSelected(true);
 		
-		tempPanel.setLayout(new GridLayout(3,1));
+		tempPanel.setLayout(new GridLayout(4,1));
+		tempPanel.add(itemTempLbl);
 		tempPanel.add(frozenRB);
 		tempPanel.add(icedRB);
 		tempPanel.add(hotRB);
@@ -698,6 +774,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	
 	//Creates non coffee pop up frame
 	public void nonCoffeeFrame(String itemName, double price){
+		//Disables main JFrame
+		this.setEnabled(false);
 		//Sets title name for later use
 		OrderItem item = new OrderItem();
 		cart.add(item);
@@ -706,27 +784,34 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		item.itemName = itemName;
 		itemView.setUndecorated(true);
 		itemView.setLocation(this.getWidth() /3 , this.getHeight() / 4);
-		itemView.setSize(300, 300);
+		itemView.setSize(300, 225);
 		itemView.setTitle(item.itemName);
 		itemView.setVisible(true);
 		itemView.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		orderPanel.add(cancelItem);
-		orderPanel.add(addItem);
-		itemView.add(orderPanel, BorderLayout.SOUTH);
-		
 		//adds item name to pop up
-		itemNameLbl.setText(item.itemName);
-		itemView.add(itemNameLbl, BorderLayout.NORTH);
+		itemNameLbl.setFont(new Font("Arial", Font.BOLD, 15));
+		itemNameLbl.setText(item.itemName + "  ($3.00)");
+		titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		titlePanel.add(itemNameLbl);
+		itemView.add(titlePanel, BorderLayout.NORTH);
 		
 		//Coffee Price
 		item.price = new BigDecimal(price);
 
+		itemtotalLBL.setFont(new Font("Arial", Font.ITALIC, 20));
 		itemtotalLBL.setText("Item Total: ");
-		orderPanel.add(itemtotalLBL, BorderLayout.SOUTH);
-		itemView.add(radioPanel, BorderLayout.CENTER);
+		radioPanel.setPreferredSize(new Dimension(300,110));
+		orderSettingsPanel.add(radioPanel, BorderLayout.CENTER);
+		orderSettingsPanel.add(itemtotalLBL);
 		
-		sizePanel.setLayout(new GridLayout(3,1));
+		itemView.add(orderSettingsPanel);
+		orderPanel.add(cancelItem);
+		orderPanel.add(addItem);
+		itemView.add(orderPanel, BorderLayout.SOUTH);
+
+		sizePanel.setLayout(new GridLayout(4,1));
+		sizePanel.add(itemSizeLbl);
 		sizePanel.add(smallRB);
 		sizePanel.add(mediumRB);
 		sizePanel.add(largeRB);
@@ -734,7 +819,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		sizeGroup.clearSelection();
 		smallRB.setSelected(true);
 		
-		tempPanel.setLayout(new GridLayout(3,1));
+		tempPanel.setLayout(new GridLayout(4,1));
 		
 		//HOT Chocolate can only be hot.
 		if(itemName != "Hot Chocolate"){
@@ -745,6 +830,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			tempGroup.clearSelection();
 			hotRB.setSelected(true);
 			
+			tempPanel.add(itemTempLbl);
 			tempPanel.add(frozenRB);
 			tempPanel.add(icedRB);
 			tempPanel.add(hotRB);
@@ -759,6 +845,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	
 	
 	public void generateReceipt() {
+		
 		//generate receipt
 		
 		JFrame printscreen = new JFrame();
@@ -799,15 +886,16 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			} catch(PrinterException x_x) {
 				System.out.println("Error printing:" + x_x);
 			}
-			
 		}
 
-		
+
+
 	}
 	
 	
 	// custom JPanel for on screen receipt
 	class ReceiptPanel extends JPanel implements Printable {
+
 		
 		public Dimension getPreferredSize() {
 			return new Dimension(400, 400);
@@ -841,6 +929,10 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			}
 			NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
 			g2d.drawString("Total: " + nf.format(orderTotal), 74, getHeight() - 55);
+
+		Image receiptIMG = Toolkit.getDefaultToolkit().getImage("CoffeeShop.png");
+		ImageIcon recieptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(240,60, Image.SCALE_SMOOTH));
+
 
 			
 			
