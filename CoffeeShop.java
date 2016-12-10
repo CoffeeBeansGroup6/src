@@ -61,6 +61,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JPanel row1 = new JPanel();
 	JPanel row2 = new JPanel();
 	JPanel row3 = new JPanel();
+	
+	JLabel[] OrderOutput;
 
 	JPanel titlePanel = new JPanel();
 	JPanel orderPanel = new JPanel();
@@ -81,6 +83,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JPanel CashPanel = new JPanel();
 	JPanel CheckPanel = new JPanel();
 	JPanel CreditDebitPanel = new JPanel();
+	JLabel CreditDebitLabel = new JLabel();
+	JLabel CheckLabel = new JLabel();
+
+	// Cash Panel
+	JLabel cashDue = new JLabel();
+	String cashGiven;
+	BigDecimal cashGivenBD = new BigDecimal("0.00");
 
 	JButton checkoutButton = new JButton("Check Out");
 	JButton editItem = new JButton("Edit Selected Item");
@@ -581,12 +590,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				checkoutView.setTitle("Checkout");
 				checkoutView.setVisible(true);
 				checkoutView.setLocation(this.getWidth() / 3, this.getHeight() / 4);
-				checkoutCodes.setPreferredSize(new Dimension(80,30));
+				checkoutCodes.setPreferredSize(new Dimension(80, 30));
 				checkoutCodes.setText("Enter Code");
-				
+
 				northcheckoutPanel.add(checkoutTitleLabel);
 				checkoutView.add(northcheckoutPanel, BorderLayout.NORTH);
-				
+
 				checkoutPanelPanel.add(centerCheckoutPanel);
 				checkoutPanelPanel.add(buttonCheckoutPanel);
 
@@ -606,17 +615,32 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		}
 
 		if (e.getSource() == PrintReceipt) {
-			if (cart.size() > 0) {
-				generateReceipt();
-			} else {
-				JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out", "Attention", 0);
-			}
+			
+			CashPanel.removeAll();
+			CashFrame.dispose();
+			
+			CreditDebitPanel.removeAll();
+			CreditDebitFrame.dispose();
+			this.setEnabled(true);
+			
+			generateReceipt();
+			
+			orderTotal = orderTotal.subtract(orderTotal);
+			orderTotalLbl.setText("$0.00");
+			cart.clear();
+			cartItems = 0;
+			numOrderItems = 0;
+			Object[] columns = { "    Order Items (" + numOrderItems + ")", " Price" };
+			model.setColumnIdentifiers(columns);
+			checkoutTable.getColumnModel().getColumn(0).setPreferredWidth(240);
+			checkoutTable.getColumnModel().getColumn(1).setPreferredWidth(80);
+			model.setRowCount(0);
 		}
 
 		if (e.getSource() == validate) {
 			if (checkoutCodes.getText().equals("manager")) {
-				orderTotal = orderTotal.add(one);
-				checkoutTotalLabel.setText("$" + JOptionPane.showInputDialog("Insert new price").toString());
+				orderTotal = new BigDecimal(JOptionPane.showInputDialog("Insert new price").toString());
+				checkoutTotalLabel.setText("$" + orderTotal);
 			}
 			if (checkoutCodes.getText().equals("employee")) {
 				orderTotal = orderTotal.divide(new BigDecimal("2"));
@@ -629,24 +653,43 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		}
 
 		if (e.getSource() == CashB) {
-
-			CashFrame.setSize(400, 400);
-			CashFrame.setTitle("Cash");
+			CashFrame.setUndecorated(true);
+			CashFrame.setSize(200, 125);
+			CashFrame.setTitle("Cash Payment");
 			CashFrame.setVisible(true);
+			CashFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
+			
+			CashPanel.add(cashDue);
+			CashPanel.add(PrintReceipt);
+			CashFrame.add(CashPanel);
+			
+			checkoutPanel.removeAll();
+			centerCheckoutPanel.removeAll();
+			checkoutView.dispose();
+			
+			cashGiven = JOptionPane.showInputDialog("Enter cash amount").toString();
 
-			CashPanel.add(cancelCheckout);
-			CashFrame.add(CashPanel, BorderLayout.SOUTH);
-
+			cashGivenBD = new BigDecimal(cashGiven);
+			cashGivenBD = cashGivenBD.subtract(orderTotal);
+			cashDue.setText("Change Due: $" + cashGivenBD);
 		}
 		if (e.getSource() == CreditDebitB) {
-
-			CreditDebitFrame.setSize(400, 400);
-			CreditDebitFrame.setTitle("Credit/Debit");
+			CreditDebitFrame.setUndecorated(true);
+			CreditDebitFrame.setSize(250, 100);
+			CreditDebitFrame.setTitle("Credit / Debit Payment");
 			CreditDebitFrame.setVisible(true);
-
-			CreditDebitPanel.add(cancelCheckout);
-			CreditDebitFrame.add(CreditDebitPanel, BorderLayout.SOUTH);
-
+			CreditDebitFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
+			
+			CreditDebitLabel.setText(checkoutTotalLabel.getText() + " was charged to your account.");
+			CreditDebitPanel.add(CreditDebitLabel);
+			CreditDebitPanel.add(PrintReceipt);
+			CreditDebitFrame.add(CreditDebitPanel);
+			
+			checkoutPanel.removeAll();
+			centerCheckoutPanel.removeAll();
+			checkoutView.dispose();
+			
+			JOptionPane.showMessageDialog(null, "Swipe Card Now", "Credit / Debit Payment", JOptionPane.PLAIN_MESSAGE);
 		}
 		if (e.getSource() == CheckB) {
 
@@ -922,38 +965,50 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			return new Dimension(400, 400);
 		}
 
+		
 		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
 
 			this.setLayout(null);
-
+			
 			Graphics2D g2d = (Graphics2D) graphics;
+		
 			RenderingHints hints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+			
+			g2d.setColor(Color.WHITE);
+			g2d.drawRect(0, 0, 400, 400);
 			g2d.setRenderingHints(hints);
 
 			Calendar cal = new GregorianCalendar();
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
-			g2d.drawString("Java Beans", 66, 20);
+			g2d.drawString("Coffee Beans", 66, 20);
 			g2d.drawString((cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/"
 					+ cal.get(Calendar.YEAR) + "  " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE)
-					+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 30);
+					+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 40);
 
-			JLabel[] OrderOutput = new JLabel[cart.size()];
+			OrderOutput = new JLabel[cart.size()];
+			
+			removeAll();
+			
 			for (int i = 0; i < cart.size(); i++) {
-				OrderOutput[i] = new JLabel("" + (i + 1) + ". " + cart.get(i));
+				
+				NumberFormat money = NumberFormat.getCurrencyInstance();
+				String price$ = money.format(cart.get(i).price.doubleValue());
+				OrderOutput[i] = new JLabel("" + (i + 1) + ". " + cart.get(i).itemName + "  " + price$);
 				// OrderOutput[i].setFont(f);
 				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
 				add(OrderOutput[i]);
 			}
+	
 			NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+
 			g2d.drawString("Total: " + nf.format(orderTotal), 74, getHeight() - 55);
 
 			Image receiptIMG = Toolkit.getDefaultToolkit().getImage("CoffeeShop.png");
 			ImageIcon recieptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(240, 60, Image.SCALE_SMOOTH));
-
 		}
 
 		@Override
@@ -1018,26 +1073,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			JButton btnSubmitPayment = new JButton("Submit Payment");
 			add(btnSubmitPayment);
 		}
-	}
-
-	class CashPanel extends JPanel {
-		private JTextField textField;
-
-		/**
-		 * Create the panel.
-		 */
-		public CashPanel() {
-			setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			JLabel lblEnterCashAmount = new JLabel("Enter Cash Amount");
-			add(lblEnterCashAmount);
-			textField = new JTextField();
-			add(textField);
-			textField.setColumns(10);
-			JButton btnNewButton = new JButton("Submit Cash Amount");
-			add(btnNewButton);
-
-		}
-
 	}
 
 	// Radio Buttons happen here
