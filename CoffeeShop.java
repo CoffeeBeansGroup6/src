@@ -99,8 +99,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JButton CheckB = new JButton("Check");
 	
 	JButton PrintReceipt = new JButton("Print Receipt");
+	
 	ReceiptPanel ReceiptPanel = new ReceiptPanel();
-
+	
 	
 	
 	//Coffee Button Images
@@ -265,6 +266,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		cocoButton.addActionListener(this);
 		teaButton.addActionListener(this);
 		doneEditing.addActionListener(this);
+		PrintReceipt.addActionListener(this);
 		
 		//radio button item listeners
 		smallRB.addItemListener(this);
@@ -273,8 +275,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		frozenRB.addItemListener(this);
 		hotRB.addItemListener(this);
 		icedRB.addItemListener(this);
-		
-		//radio button checkout item listeners
 		
 		
 		//added all size radio buttons to size group
@@ -551,9 +551,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
 
-			
-			generateReceipt();
-
 			//Disables main JFrame
 			//this.setEnabled(false);
 
@@ -567,28 +564,13 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			
 			JPanel radiocheckoutPanel = new JPanel();
 			JPanel radioPanelPanel = new JPanel();
-			
-			//Adding Radio Buttons for checkout
-			/*CashRB = new JRadioButton("Cash", true);
-			CashRB.addItemListener(this);
-			CreditDebitRB = new JRadioButton("Credit or Debit Card", false);
-			CreditDebitRB.addItemListener(this);
-			CheckRB = new JRadioButton("Check", false);
-			PrintReceipt = new JButton("Print Receipt");
-			CheckRB.addItemListener(this);
-			paymentRB.add(CashRB);
-			paymentRB.add(CreditDebitRB);
-			paymentRB.add(CheckRB);
-			paymentRB.add(PrintReceipt);
 		
-			radiocheckoutPanel.add(CashRB);
-			radiocheckoutPanel.add(CreditDebitRB);
-			radiocheckoutPanel.add(CheckRB);*/
 			
 			CashB.addActionListener(this);
 			CreditDebitB.addActionListener(this);
 			CheckB.addActionListener(this);
 			PrintReceipt = new JButton("Print Receipt");
+			PrintReceipt.addActionListener(this);
 			paymentRB.add(CashB);
 			paymentRB.add(CreditDebitB);
 			paymentRB.add(CheckB);
@@ -600,28 +582,21 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			radiocheckoutPanel.add(CheckB);
 			radiocheckoutPanel.add(PrintReceipt);
 			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
+			
 		}
-
 		
-		/*Object source = e.getSource();
-        if (source instanceof JButton) {
-            JButton PrintReceipt = (JButton)source;
-            generateReceipt();
-           /* if(e.getSource() == PrintReceipt){
-    			/*if (cart.size() > 0) {
-    				generateReceipt();*/
-    				
-    			//} else {
-    				//JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out",
-    						//"Attention", 0);
-
-    			//}
-    		//}
-            
-       // }
+		if(e.getSource() == PrintReceipt) { 
+			if(cart.size()>0){
+				generateReceipt();
+			}else{
+				JOptionPane.showMessageDialog(this, "Add items to the order prior to checking out",
+						"Attention", 0);
+			}
+			
+			
+			
+		}
 		
-	//}
-
 	}
 
 
@@ -694,17 +669,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		radioPanel.add(tempPanel);
 	}
 	
-	public void CreditDebitFrame (){
-		
-	}
 	
-	public void CashFrame(){
-		
-	}
-	
-	public void CheckFrame(){
-		
-	}
 	
 	//Creates Specialty Coffee Pop Up Frame
 	public void specialCoffeeFrame(String itemName, double price){
@@ -932,12 +897,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 		Image receiptIMG = Toolkit.getDefaultToolkit().getImage("CoffeeShop.png");
 		ImageIcon recieptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(240,60, Image.SCALE_SMOOTH));
-
-
-			
-			
-
-		
 		
 		}
 		@Override
