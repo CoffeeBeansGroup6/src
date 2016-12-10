@@ -9,11 +9,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-
 import java.awt.RenderingHints;
-
 import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -42,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 //hi sneha
 /*
@@ -136,6 +134,14 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JButton cocoButton = new JButton(cocoIcon);
 	JButton teaButton = new JButton(teaIcon);
 	//-----------------------------------
+	
+	//Checkout Sequence
+	JTextField checkoutCodes = new JTextField("Enter Code");
+	JPanel centerCheckoutPanel = new JPanel();
+	JButton validate = new JButton("Validate");
+	JLabel checkoutTotalLabel = new JLabel();
+	JLabel checkoutTitleLabel = new JLabel("Checkout");
+
 	
 	JLabel orderTotalLbl = new JLabel("$0.00");
 	JLabel itemSizeLbl = new JLabel("Size:");
@@ -275,6 +281,11 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		teaButton.addActionListener(this);
 		doneEditing.addActionListener(this);
 		PrintReceipt.addActionListener(this);
+		CashB.addActionListener(this);
+		CreditDebitB.addActionListener(this);
+		CheckB.addActionListener(this);
+		cancelCheckout.addActionListener(this);
+		validate.addActionListener(this);
 		
 		//radio button item listeners
 		smallRB.addItemListener(this);
@@ -558,40 +569,28 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
-
-			//Disables main JFrame
-			//this.setEnabled(false);
-
-			
-			checkoutView.setSize(400, 400);
-			checkoutView.setTitle("Checkout");
-			checkoutView.setVisible(true);
-			
-			checkoutPanel.add(cancelCheckout);
-			checkoutView.add(checkoutPanel, BorderLayout.SOUTH);
-			
-			JPanel radiocheckoutPanel = new JPanel();
-			JPanel radioPanelPanel = new JPanel();
-		
-			
-			CashB.addActionListener(this);
-			CreditDebitB.addActionListener(this);
-			CheckB.addActionListener(this);
-			PrintReceipt.addActionListener(this);
-			PrintReceipt = new JButton("Print Receipt");
-			PrintReceipt.addActionListener(this);
-			paymentRB.add(CashB);
-			paymentRB.add(CreditDebitB);
-			paymentRB.add(CheckB);
-			paymentRB.add(PrintReceipt);
-			
-			radioPanelPanel.add(radiocheckoutPanel, new GridLayout(1,4));
-			radiocheckoutPanel.add(CashB);
-			radiocheckoutPanel.add(CreditDebitB);
-			radiocheckoutPanel.add(CheckB);
-			radiocheckoutPanel.add(PrintReceipt);
-			checkoutView.add(radioPanelPanel, BorderLayout.CENTER);
-			
+			if(numOrderItems > 0){
+				//Disables main JFrame
+				this.setEnabled(false);
+				checkoutView.setUndecorated(true);
+				checkoutView.setSize(400, 400);
+				checkoutView.setTitle("Checkout");
+				checkoutView.setVisible(true);
+				checkoutView.add(checkoutTitleLabel, BorderLayout.NORTH);
+				
+				centerCheckoutPanel.add(checkoutCodes);
+				checkoutPanel.add(cancelCheckout);
+				checkoutView.add(checkoutPanel, BorderLayout.SOUTH);
+				
+				centerCheckoutPanel.add(validate);
+				centerCheckoutPanel.add(CashB);
+				centerCheckoutPanel.add(CreditDebitB);
+				centerCheckoutPanel.add(CheckB);
+				
+				checkoutView.add(centerCheckoutPanel, BorderLayout.CENTER);
+				checkoutTotalLabel.setText("$" + orderTotal);
+				centerCheckoutPanel.add(checkoutTotalLabel);
+			}
 		}
 		
 		if(e.getSource() == PrintReceipt) { 
@@ -602,6 +601,22 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 						"Attention", 0);
 			}
 		}
+		
+		if(e.getSource() == validate){
+			if(checkoutCodes.getText().equals("manager")){
+				orderTotal = orderTotal.add(one);
+				checkoutTotalLabel.setText("$" + JOptionPane.showInputDialog("Insert new price").toString());
+			}
+			if(checkoutCodes.getText().equals("employee")){
+				orderTotal = orderTotal.divide(new BigDecimal("2"));
+				checkoutTotalLabel.setText("$" + orderTotal);
+			}
+			if(checkoutCodes.getText().equals("coupon")){
+				orderTotal = orderTotal.subtract(new BigDecimal("2.00"));
+				checkoutTotalLabel.setText("$" + orderTotal);
+			}
+		}
+		
 		if(e.getSource()==CashB){
 			
 			CashFrame.setSize(400, 400);
@@ -629,13 +644,18 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			CheckFrame.setVisible(true);
 			
 			CheckPanel.add(cancelCheckout);
-			CheckFrame.add(CheckPanel, BorderLayout.SOUTH);
-			
+			CheckFrame.add(CheckPanel, BorderLayout.SOUTH);	
 		}
 		
+		if(e.getSource() == cancelCheckout){
+			//ReEnables main JFrame
+			this.setEnabled(true);
+			
+			checkoutPanel.removeAll();
+			centerCheckoutPanel.removeAll();
+			checkoutView.dispose();
+		}
 	}
-
-
 	
 	//Creates Plain Coffee Pop Up Frame
 	public void plainCoffeeFrame(String itemName, double price){
