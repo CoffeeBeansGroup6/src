@@ -1058,7 +1058,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				NumberFormat money = NumberFormat.getCurrencyInstance();
 				String price$ = money.format(cart.get(i).price.doubleValue());
 				OrderOutput[i] = new JLabel("" + (i + 1) + ". " + cart.get(i).itemName + "  " + price$);
-				// OrderOutput[i].setFont(f);
 				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
 				add(OrderOutput[i]);
 			}
