@@ -418,6 +418,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			//ReEnables main JFrame
 			this.setEnabled(true);
 			
+			//Plays add sound
+			addSound.play();
 			//closes editing dialogue
 			//updates table and total price label
 			
