@@ -325,6 +325,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		cocoButton.setPreferredSize(new Dimension(225, 225));
 		teaButton.setPreferredSize(new Dimension(225, 225));
 		checkoutButton.setPreferredSize(new Dimension(320, 60));
+		PrintReceipt.setPreferredSize(new Dimension(150,40));
 
 		sp.setPreferredSize(new Dimension(320, 530));
 
@@ -410,12 +411,12 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		// -----East Panel Buttons-----------
 		if (e.getSource() == editItem) {
 			// Disables main JFrame
-			this.setEnabled(false);
 			// edits selected item
 			// brings up pop up window for changes
 			// creates a temporary Edit Item
 
 			if (checkoutTable.getSelectedRow() > -1) {
+				this.setEnabled(false);
 				editing = true;
 				
 				//Hot Chocolate doesnt get temp settings
@@ -468,8 +469,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				} else if (cart.get(checkoutTable.getSelectedRow()).temp == "Hot ") {
 					hotRB.setSelected(true);
 				}
-
-
 			}
 		}
 
@@ -600,6 +599,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				checkoutCodes.setPreferredSize(new Dimension(80, 30));
 				checkoutCodes.setText("Enter Code");
 
+				checkoutTitleLabel.setFont(new Font("Arial", Font.BOLD, 15));
 				northcheckoutPanel.add(checkoutTitleLabel);
 				checkoutView.add(northcheckoutPanel, BorderLayout.NORTH);
 
@@ -615,7 +615,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				buttonCheckoutPanel.add(CreditDebitB);
 				buttonCheckoutPanel.add(CheckB);
 
-				checkoutTotalLabel.setText("$" + orderTotal);
+				checkoutTotalLabel.setText("Total: $" + orderTotal);
 				centerCheckoutPanel.add(checkoutTotalLabel);
 				checkoutView.add(checkoutPanelPanel, BorderLayout.CENTER);
 			}
@@ -628,6 +628,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			
 			CreditDebitPanel.removeAll();
 			CreditDebitFrame.dispose();
+			
+			CheckPanel.removeAll();
+			CheckFrame.dispose();
 			this.setEnabled(true);
 			
 			generateReceipt();
@@ -646,22 +649,25 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 		if (e.getSource() == validate) {
 			if (checkoutCodes.getText().equals("manager")) {
-				orderTotal = new BigDecimal(JOptionPane.showInputDialog("Insert new price").toString());
-				checkoutTotalLabel.setText("$" + orderTotal);
+				orderTotal = new BigDecimal(JOptionPane.showInputDialog(null,"Insert new price. (ex: 10.00)","Manager Override",JOptionPane.PLAIN_MESSAGE).toString());
+				checkoutTotalLabel.setText("Total: $" + orderTotal);
 			}
 			if (checkoutCodes.getText().equals("employee")) {
 				orderTotal = orderTotal.divide(new BigDecimal("2"));
-				checkoutTotalLabel.setText("$" + orderTotal);
+				checkoutTotalLabel.setText("Total: $" + orderTotal);
 			}
 			if (checkoutCodes.getText().equals("coupon")) {
 				orderTotal = orderTotal.subtract(new BigDecimal("2.00"));
-				checkoutTotalLabel.setText("$" + orderTotal);
+				checkoutTotalLabel.setText("Total: $" + orderTotal);
 			}
+			checkoutView.setVisible(false);
+			checkoutView.setVisible(true);
+			checkoutView.repaint();
 		}
 
 		if (e.getSource() == CashB) {
 			CashFrame.setUndecorated(true);
-			CashFrame.setSize(200, 125);
+			CashFrame.setSize(200, 200);
 			CashFrame.setTitle("Cash Payment");
 			CashFrame.setVisible(true);
 			CashFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
@@ -674,20 +680,23 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			centerCheckoutPanel.removeAll();
 			checkoutView.dispose();
 			
-			cashGiven = JOptionPane.showInputDialog("Enter cash amount").toString();
+			cashGiven = JOptionPane.showInputDialog(CashFrame,"Enter cash recieved. (ex: 20.00)","Make Change", JOptionPane.PLAIN_MESSAGE).toString();
 
+			CashFrame.setVisible(false);
+			CashFrame.setVisible(true);
 			cashGivenBD = new BigDecimal(cashGiven);
 			cashGivenBD = cashGivenBD.subtract(orderTotal);
 			cashDue.setText("Change Due: $" + cashGivenBD);
+			CashFrame.repaint();
 		}
 		if (e.getSource() == CreditDebitB) {
 			CreditDebitFrame.setUndecorated(true);
-			CreditDebitFrame.setSize(250, 100);
+			CreditDebitFrame.setSize(400, 150);
 			CreditDebitFrame.setTitle("Credit / Debit Payment");
 			CreditDebitFrame.setVisible(true);
 			CreditDebitFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
 			
-			CreditDebitLabel.setText(checkoutTotalLabel.getText() + " was charged to your account.");
+			CreditDebitLabel.setText("Waiting for swipe...");
 			CreditDebitPanel.add(CreditDebitLabel);
 			CreditDebitPanel.add(PrintReceipt);
 			CreditDebitFrame.add(CreditDebitPanel);
@@ -697,15 +706,32 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			checkoutView.dispose();
 			
 			JOptionPane.showMessageDialog(null, "Swipe Card Now", "Credit / Debit Payment", JOptionPane.PLAIN_MESSAGE);
+			CreditDebitFrame.setVisible(false);
+			CreditDebitFrame.setVisible(true);
+			CreditDebitLabel.setText(checkoutTotalLabel.getText() + ". The amount was charged to your account.");
+			CreditDebitFrame.repaint();
 		}
 		if (e.getSource() == CheckB) {
-
-			CheckFrame.setSize(400, 400);
-			CheckFrame.setTitle("Check");
+			CheckFrame.setUndecorated(true);
+			CheckFrame.setSize(400, 150);
+			CheckFrame.setTitle("Check Payment");
 			CheckFrame.setVisible(true);
-
-			CheckPanel.add(cancelCheckout);
-			CheckFrame.add(CheckPanel, BorderLayout.SOUTH);
+			CheckFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
+			
+			CheckLabel.setText("Waiting for check...");
+			CheckPanel.add(CheckLabel);
+			CheckPanel.add(PrintReceipt);
+			CheckFrame.add(CheckPanel);
+			
+			checkoutPanel.removeAll();
+			centerCheckoutPanel.removeAll();
+			checkoutView.dispose();
+			
+			JOptionPane.showMessageDialog(null, "Insert Check", "Check Payment", JOptionPane.PLAIN_MESSAGE);
+			CheckFrame.setVisible(false);
+			CheckFrame.setVisible(true);
+			CheckLabel.setText(checkoutTotalLabel.getText() + ". Your check was processed.");
+			CheckFrame.repaint();
 		}
 
 		if (e.getSource() == cancelCheckout) {
