@@ -46,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
  * Team 6: Coffee Beans
  * Sneha Akarapu, Kyle Watkins, Preston Jackson, Sarah Taff, Alejandro Delgadillo, Ben Deleus
  * 
- * Coffee Shop
+ * Coffee Shop POS Application
  */
 
 public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
@@ -54,8 +54,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 
-	//Delcaration of many objects, variables
-	
+	//Declaration of many objects, variables
 	JPanel eastPanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
 	JPanel mainPanel = new JPanel();
@@ -206,7 +205,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		public OrderItem(String name) {
 			itemName = name;
 		}
-
+		
 		// returns the string array - item description and price
 		public String[] getRow() {
 
@@ -222,7 +221,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			String row[] = { "  " + size + " " + temp + itemName, "   " + price$ };
 			return row;
 		}
-
 	}
 
 	public CoffeeShop() {
@@ -560,8 +558,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		}
 
 		// All Menu Items call a function that creates a pop up frame
-		// plain coffees (top row) are $4.00
-		// specialty coffees (middle row) are $5.00
+		// plain coffees (top row and decaf) are $4.00
+		// specialty coffees (middle row except decaf) are $5.00
 		// non coffees (bottom row) are $6.00
 		if (e.getSource() == darkButton) {
 			plainCoffeeFrame("Dark Roast Coffee", 4.00);
@@ -975,9 +973,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	}
 
 	public void generateReceipt() {
-
 		// generate receipt
-
 		JFrame printscreen = new JFrame();
 
 		printscreen.setSize(new Dimension(260, 320 + 16 * cart.size()));
@@ -1058,7 +1054,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				NumberFormat money = NumberFormat.getCurrencyInstance();
 				String price$ = money.format(cart.get(i).price.doubleValue());
 				OrderOutput[i] = new JLabel("" + (i + 1) + ". " + cart.get(i).itemName + "  " + price$);
-				// OrderOutput[i].setFont(f);
+				
 				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
 				add(OrderOutput[i]);
 			}
@@ -1125,7 +1121,5 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		} else if (e.getSource() == hotRB) {
 			cart.get(cart.size() - 1).temp = "Hot ";
 		}
-
 	}
-
 }
