@@ -510,7 +510,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		//All Check Out screens carried out here
 		if(e.getSource() == checkoutButton){
 			//Disables main JFrame
-			this.setEnabled(false);
+			//this.setEnabled(false);
 			
 			checkoutView.setSize(400, 400);
 			checkoutView.setTitle("Checkout");
