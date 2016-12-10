@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -107,6 +108,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JButton PrintReceipt = new JButton("Print Receipt");
 	
 	ReceiptPanel ReceiptPanel = new ReceiptPanel();
+	
 	
 	
 	
@@ -943,7 +945,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			
 			JLabel[] OrderOutput = new JLabel[cart.size()];
 			for (int i = 0; i < cart.size(); i++) {
-				OrderOutput[i] = new JLabel("" + (i + 1) + ". " +(cart.get(i)));
+				OrderOutput[i] = new JLabel("" + (i + 1) + ". " +cart.get(i));
 				//OrderOutput[i].setFont(f);
 				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
 				add(OrderOutput[i]);
@@ -969,6 +971,74 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		}
 	}
 	
+	class CreditDebitPanel extends JPanel{
+		private JTextField textField;
+
+		public CreditDebitPanel() {
+		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblEnterCreditCard = new JLabel("Enter Credit Card Number");
+		add(lblEnterCreditCard);
+
+		textField = new JTextField();
+		add(textField);
+		textField.setColumns(16);
+
+		JButton btnNewButton = new JButton("Submit Payment");
+		btnNewButton.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+		}
+		});
+		add(btnNewButton);
+
+		}
+	}
+	
+	class CheckPanel extends JPanel{
+		private JTextField textField;
+		private JTextField textField_1;
+		private JTextField textField_2;
+		public CheckPanel(){
+			setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			JLabel lblEnterAccountNumber = new JLabel("Enter Account Number");
+			add(lblEnterAccountNumber);
+			textField = new JTextField();
+			add(textField);
+			textField.setColumns(10);
+			JLabel lblNewLabel = new JLabel("Enter Routing Number");
+			add(lblNewLabel);
+			textField_1 = new JTextField();
+			add(textField_1);
+			textField_1.setColumns(10);
+			JLabel lblNewLabel_1 = new JLabel("Enter Check Number");
+			add(lblNewLabel_1);
+			textField_2 = new JTextField();
+			add(textField_2);
+			textField_2.setColumns(10);
+			JButton btnSubmitPayment = new JButton("Submit Payment");
+			add(btnSubmitPayment);
+		}
+	}
+	
+	class CashPanel extends JPanel{
+		private JTextField textField;
+
+		/**
+		* Create the panel.
+		*/
+		public CashPanel() {
+		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		JLabel lblEnterCashAmount = new JLabel("Enter Cash Amount");
+		add(lblEnterCashAmount);
+		textField = new JTextField();
+		add(textField);
+		textField.setColumns(10);
+		JButton btnNewButton = new JButton("Submit Cash Amount");
+		add(btnNewButton);
+
+		}
+		
+	}
 	//Radio Buttons happen here
 	@Override
 	public void itemStateChanged(ItemEvent e) {
