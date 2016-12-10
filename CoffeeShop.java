@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyListener;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -42,12 +41,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-//hi sneha
+
 /*
  * Team 6: Coffee Beans
  * Sneha Akarapu, Kyle Watkins, Preston Jackson, Sarah Taff, Alejandro Delgadillo, Ben Deleus
  * 
- * CoffeeShop
+ * Coffee Shop
  */
 
 public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
@@ -55,13 +54,15 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	// holds all orderItems in your cart
 	ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
 
+	//Delcaration of many objects, variables
+	
 	JPanel eastPanel = new JPanel();
 	JPanel buttonPanel = new JPanel();
 	JPanel mainPanel = new JPanel();
 	JPanel row1 = new JPanel();
 	JPanel row2 = new JPanel();
 	JPanel row3 = new JPanel();
-	
+
 	JLabel[] OrderOutput;
 
 	JPanel titlePanel = new JPanel();
@@ -76,7 +77,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JPanel sizePanel = new JPanel();
 	JPanel tempPanel = new JPanel();
 
-	// Checkout Panels
+	// Checkout Objects
 	JFrame CashFrame = new JFrame();
 	JFrame CheckFrame = new JFrame();
 	JFrame CreditDebitFrame = new JFrame();
@@ -85,6 +86,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	JPanel CreditDebitPanel = new JPanel();
 	JLabel CreditDebitLabel = new JLabel();
 	JLabel CheckLabel = new JLabel();
+	Boolean payCash = false;
+	Boolean payCard = false;
+	Boolean payCheck = false;
 
 	// Cash Panel
 	JLabel cashDue = new JLabel();
@@ -233,6 +237,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		} catch (MalformedURLException frack) {
 			frack.printStackTrace();
 		}
+		
 		// Table Settings
 		// --------------------------------------------------
 		model = new DefaultTableModel(0, 2) {
@@ -325,7 +330,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 		cocoButton.setPreferredSize(new Dimension(225, 225));
 		teaButton.setPreferredSize(new Dimension(225, 225));
 		checkoutButton.setPreferredSize(new Dimension(320, 60));
-		PrintReceipt.setPreferredSize(new Dimension(150,40));
+		PrintReceipt.setPreferredSize(new Dimension(150, 40));
 
 		sp.setPreferredSize(new Dimension(320, 530));
 
@@ -418,9 +423,9 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			if (checkoutTable.getSelectedRow() > -1) {
 				this.setEnabled(false);
 				editing = true;
-				
-				//Hot Chocolate doesnt get temp settings
-				if(cart.get(checkoutTable.getSelectedRow()).itemName == "Hot Chocolate"){
+
+				// Hot Chocolate doesnt get temp settings
+				if (cart.get(checkoutTable.getSelectedRow()).itemName == "Hot Chocolate") {
 					tempGroup.clearSelection();
 					cart.get(checkoutTable.getSelectedRow()).temp = "";
 				}
@@ -449,7 +454,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				orderPanel.removeAll();
 				orderPanel.add(doneEditing);
 
-				// set RadioButtons the item's values
+				// set RadioButtons to the item's values
 				sizeGroup.clearSelection();
 
 				if (cart.get(checkoutTable.getSelectedRow()).size == "Small") {
@@ -621,20 +626,22 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			}
 		}
 
+		//generates a receipt for printing
+		//resets app to begin another checkout
 		if (e.getSource() == PrintReceipt) {
-			
+
 			CashPanel.removeAll();
 			CashFrame.dispose();
-			
+
 			CreditDebitPanel.removeAll();
 			CreditDebitFrame.dispose();
-			
+
 			CheckPanel.removeAll();
 			CheckFrame.dispose();
 			this.setEnabled(true);
-			
+
 			generateReceipt();
-			
+
 			orderTotal = orderTotal.subtract(orderTotal);
 			orderTotalLbl.setText("$0.00");
 			cart.clear();
@@ -645,11 +652,19 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			checkoutTable.getColumnModel().getColumn(0).setPreferredWidth(240);
 			checkoutTable.getColumnModel().getColumn(1).setPreferredWidth(80);
 			model.setRowCount(0);
+			payCash = false;
+			payCard = false;
+			payCheck = false;
 		}
 
+		//checks your checkout code
+		//"manager" allows price override
+		//"employee" gets half off
+		//"coupon" subtracts $2.00!
 		if (e.getSource() == validate) {
 			if (checkoutCodes.getText().equals("manager")) {
-				orderTotal = new BigDecimal(JOptionPane.showInputDialog(null,"Insert new price. (ex: 10.00)","Manager Override",JOptionPane.PLAIN_MESSAGE).toString());
+				orderTotal = new BigDecimal(JOptionPane.showInputDialog(null, "Insert new price. (ex: 10.00)",
+						"Manager Override", JOptionPane.PLAIN_MESSAGE).toString());
 				checkoutTotalLabel.setText("Total: $" + orderTotal);
 			}
 			if (checkoutCodes.getText().equals("employee")) {
@@ -665,22 +680,26 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			checkoutView.repaint();
 		}
 
+		//carries out cash payment
 		if (e.getSource() == CashB) {
+			payCash = true;
 			CashFrame.setUndecorated(true);
 			CashFrame.setSize(200, 200);
 			CashFrame.setTitle("Cash Payment");
 			CashFrame.setVisible(true);
 			CashFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
-			
-			CashPanel.add(cashDue);
+
+			CashPanel.add(checkoutTotalLabel);
 			CashPanel.add(PrintReceipt);
+			CashPanel.add(cashDue);
 			CashFrame.add(CashPanel);
-			
+
 			checkoutPanel.removeAll();
 			centerCheckoutPanel.removeAll();
 			checkoutView.dispose();
-			
-			cashGiven = JOptionPane.showInputDialog(CashFrame,"Enter cash recieved. (ex: 20.00)","Make Change", JOptionPane.PLAIN_MESSAGE).toString();
+
+			cashGiven = JOptionPane.showInputDialog(CashFrame, "Enter cash recieved. (ex: 20.00)", "Make Change",
+					JOptionPane.PLAIN_MESSAGE).toString();
 
 			CashFrame.setVisible(false);
 			CashFrame.setVisible(true);
@@ -689,44 +708,50 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			cashDue.setText("Change Due: $" + cashGivenBD);
 			CashFrame.repaint();
 		}
+		
+		//carries out credit payment
 		if (e.getSource() == CreditDebitB) {
+			payCard = true;
 			CreditDebitFrame.setUndecorated(true);
 			CreditDebitFrame.setSize(400, 150);
 			CreditDebitFrame.setTitle("Credit / Debit Payment");
 			CreditDebitFrame.setVisible(true);
 			CreditDebitFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
-			
+
 			CreditDebitLabel.setText("Waiting for swipe...");
 			CreditDebitPanel.add(CreditDebitLabel);
 			CreditDebitPanel.add(PrintReceipt);
 			CreditDebitFrame.add(CreditDebitPanel);
-			
+
 			checkoutPanel.removeAll();
 			centerCheckoutPanel.removeAll();
 			checkoutView.dispose();
-			
+
 			JOptionPane.showMessageDialog(null, "Swipe Card Now", "Credit / Debit Payment", JOptionPane.PLAIN_MESSAGE);
 			CreditDebitFrame.setVisible(false);
 			CreditDebitFrame.setVisible(true);
 			CreditDebitLabel.setText(checkoutTotalLabel.getText() + ". The amount was charged to your account.");
 			CreditDebitFrame.repaint();
 		}
+		
+		//carries out check payment
 		if (e.getSource() == CheckB) {
+			payCheck = true;
 			CheckFrame.setUndecorated(true);
 			CheckFrame.setSize(400, 150);
 			CheckFrame.setTitle("Check Payment");
 			CheckFrame.setVisible(true);
 			CheckFrame.setLocation(this.getWidth() / 3, this.getHeight() / 4);
-			
+
 			CheckLabel.setText("Waiting for check...");
 			CheckPanel.add(CheckLabel);
 			CheckPanel.add(PrintReceipt);
 			CheckFrame.add(CheckPanel);
-			
+
 			checkoutPanel.removeAll();
 			centerCheckoutPanel.removeAll();
 			checkoutView.dispose();
-			
+
 			JOptionPane.showMessageDialog(null, "Insert Check", "Check Payment", JOptionPane.PLAIN_MESSAGE);
 			CheckFrame.setVisible(false);
 			CheckFrame.setVisible(true);
@@ -734,6 +759,7 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			CheckFrame.repaint();
 		}
 
+		//cancels checkout menu
 		if (e.getSource() == cancelCheckout) {
 			// ReEnables main JFrame
 			this.setEnabled(true);
@@ -998,17 +1024,16 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 			return new Dimension(400, 400);
 		}
 
-		
 		public void paintComponent(Graphics graphics) {
 			super.paintComponent(graphics);
 
 			this.setLayout(null);
-			
+
 			Graphics2D g2d = (Graphics2D) graphics;
-		
+
 			RenderingHints hints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
 					RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
-			
+
 			g2d.setColor(Color.WHITE);
 			g2d.drawRect(0, 0, 400, 400);
 			g2d.setRenderingHints(hints);
@@ -1017,17 +1042,19 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 
 			g2d.setColor(Color.BLACK);
 			g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
-			g2d.drawString("Coffee Beans", 66, 20);
+			g2d.drawString("-- RECEIPT --", 83, 17);
+			g2d.drawString("Coffee Beans' Coffee Shop", 57, 39);
 			g2d.drawString((cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/"
 					+ cal.get(Calendar.YEAR) + "  " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE)
-					+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 66, 40);
+					+ " " + (cal.get(Calendar.AM_PM) == 0 ? "AM" : "PM"), 65, 60);
 
+			g2d.drawString("Customer Order:", 10, 100);
 			OrderOutput = new JLabel[cart.size()];
-			
+
 			removeAll();
-			
+
 			for (int i = 0; i < cart.size(); i++) {
-				
+
 				NumberFormat money = NumberFormat.getCurrencyInstance();
 				String price$ = money.format(cart.get(i).price.doubleValue());
 				OrderOutput[i] = new JLabel("" + (i + 1) + ". " + cart.get(i).itemName + "  " + price$);
@@ -1035,11 +1062,19 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				OrderOutput[i].setBounds(10, 110 + (i * 12), 240, 12);
 				add(OrderOutput[i]);
 			}
-	
+
 			NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
 
-			g2d.drawString("Total: " + nf.format(orderTotal), 74, getHeight() - 55);
+			if (payCash) {
+				g2d.drawString("Payment Type: CASH", 10, getHeight() - 100);
+			} else if (payCard) {
+				g2d.drawString("Payment Type: CARD", 10, getHeight() - 100);
+			} else if (payCheck) {
+				g2d.drawString("Payment Type: CHECK", 10, getHeight() - 100);
+			}
 
+			g2d.drawString("Total: " + nf.format(orderTotal), 74, getHeight() - 55);
+			g2d.drawString("Thank You!", 74, getHeight() - 30);
 			Image receiptIMG = Toolkit.getDefaultToolkit().getImage("CoffeeShop.png");
 			ImageIcon recieptIMGICON = new ImageIcon(receiptIMG.getScaledInstance(240, 60, Image.SCALE_SMOOTH));
 		}
@@ -1055,56 +1090,6 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 				paint(g2d);
 				return (PAGE_EXISTS);
 			}
-		}
-	}
-
-	class CreditDebitPanel extends JPanel {
-		private JTextField textField;
-
-		public CreditDebitPanel() {
-			setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-			JLabel lblEnterCreditCard = new JLabel("Enter Credit Card Number");
-			add(lblEnterCreditCard);
-
-			textField = new JTextField();
-			add(textField);
-			textField.setColumns(16);
-
-			JButton btnNewButton = new JButton("Submit Payment");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-			add(btnNewButton);
-
-		}
-	}
-
-	class CheckPanel extends JPanel {
-		private JTextField textField;
-		private JTextField textField_1;
-		private JTextField textField_2;
-
-		public CheckPanel() {
-			setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			JLabel lblEnterAccountNumber = new JLabel("Enter Account Number");
-			add(lblEnterAccountNumber);
-			textField = new JTextField();
-			add(textField);
-			textField.setColumns(10);
-			JLabel lblNewLabel = new JLabel("Enter Routing Number");
-			add(lblNewLabel);
-			textField_1 = new JTextField();
-			add(textField_1);
-			textField_1.setColumns(10);
-			JLabel lblNewLabel_1 = new JLabel("Enter Check Number");
-			add(lblNewLabel_1);
-			textField_2 = new JTextField();
-			add(textField_2);
-			textField_2.setColumns(10);
-			JButton btnSubmitPayment = new JButton("Submit Payment");
-			add(btnSubmitPayment);
 		}
 	}
 
