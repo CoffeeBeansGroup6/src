@@ -96,8 +96,8 @@ public class CoffeeShop extends JFrame implements ActionListener, ItemListener {
 	BigDecimal cashGivenBD = new BigDecimal("0.00");
 
 	JButton checkoutButton = new JButton("Check Out");
-	JButton editItem = new JButton("Edit Selected Item");
-	JButton removeItem = new JButton("Remove Selected Item");
+	JButton editItem = new JButton("Edit Selected");
+	JButton removeItem = new JButton("Remove Selected");
 
 	// Radio Buttons
 	ButtonGroup sizeGroup = new ButtonGroup();
